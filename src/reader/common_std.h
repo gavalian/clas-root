@@ -2,7 +2,7 @@
  * Definitions of integers. ROOT CINT has problems parsing stdint.h file.
  * this file defines commonly used integers to avoid problems with CINT.
  */
-#include <sdtio.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 #ifndef uint32_t
