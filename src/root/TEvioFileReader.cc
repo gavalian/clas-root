@@ -103,7 +103,12 @@ TEvioDataBank *TEvioFileReader::getBank(int tag, int num)
 
 TArrayD *TEvioFileReader::getArrayDouble(int tag, int num)
 {
-  TArrayD *newArray = new TArrayD();
+  vector<double>      *data = reader.getDoubleVector(tag,num);
+  TArrayD *array_ptr = new TArrayD();
+  array_ptr->Set(data->size(),data->data());
+  return array_ptr;
+
+  /*  TArrayD *newArray = new TArrayD();
   evio::evioDOMTree event(buffer);
   evio::evioDOMNodeListP nodeList = event.getNodeList(evio::parentTagNumEquals(tag, 200));
   evio::evioDOMNodeList::const_iterator iter;
@@ -119,14 +124,14 @@ TArrayD *TEvioFileReader::getArrayDouble(int tag, int num)
       return newArray;
     }
   }
-  /*vector<double> *vectorData = getDoubleVector(tag,num);
+  vector<double> *vectorData = getDoubleVector(tag,num);
     if(vectorData!=NULL){
     cout << "received the array and it is not NULL. size = " << vectorData->size() << endl;
     newArray->Set(vectorData->size(),vectorData->data());
     return newArray;
-    }*/
+    }
   newArray->Set(0);
-  return newArray;
+  return newArray;*/
 }
 
 

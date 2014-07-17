@@ -45,6 +45,7 @@ void EvioFileReader::open(const char *filename)
   evOpen(file,"r",&evioFileHandle);
   numberOfEventsRead = 0;
   readTimeTotalMS    = 0.0;
+  cout << "***** OPENED FILE : " << filename << endl;
 }
 
 /**
@@ -56,6 +57,7 @@ bool EvioFileReader::next()
 {
     long double start_time = time(0);
     int read_status = evRead(evioFileHandle,buffer,MAXEVIOBUF);
+    cout << "read status = " << read_status << endl;
     long double end_time   = time(0);
     //cout << " measured = " << start_time << " " << end_time << endl;
     if(read_status==0){
@@ -79,6 +81,19 @@ void  EvioFileReader::getEvent(EvioDataEvent &event)
 
 vector<double>   *EvioFileReader::getDoubleVector(int tag, int num)
 {
+  evio::evioBankIndex b0(buffer,0);
+  evio::bankIndex b;
+  if(b0.tagNumExists(evio::tagNum(tag,num))){
+    //cout << " found data with tag and num = " << tag << "  " << num << endl;                                                                           
+    b = b0.getBankIndex(evio::tagNum(tag,num));
+    int dataLength;
+    const double *data_ptr = b0.getData<double>(b,&dataLength);
+    //cout << " found data with tag and num = " << tag << "  " << num << "  length = " << dataLength << endl;                                            
+    vector<double> *vec_ptr = new vector<double>(dataLength);
+    memcpy(vec_ptr->data(),data_ptr,dataLength*sizeof(double));
+    return vec_ptr;
+  }
+  return new vector<double>();
 }
 
 vector<int32_t>  *EvioFileReader::getIntVector(int tag, int num)
