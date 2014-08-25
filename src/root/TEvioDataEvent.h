@@ -13,6 +13,7 @@
 #include "TROOT.h"
 #include "TSystem.h"
 #include "TObject.h"
+#include "TArrayF.h"
 #include "TArrayD.h"
 #include "TArrayI.h"
 #include "EvioDataEvent.h"
@@ -36,6 +37,7 @@ TEvioDataEvent();
 /*TEvioDataEvent( const TEvioDataEvent &obj); */ 
 void init(uint32_t *ptr, int len);
 
+TArrayF   getFloatArray(int tag, int num);
 TArrayD   getDoubleArray(int tag, int num);
 TArrayI   getIntegerArray(int tag, int num);
 EvioDataEvent &getDataEvent(){ return dataEvent;};

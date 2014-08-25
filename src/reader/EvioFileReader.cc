@@ -57,10 +57,10 @@ bool EvioFileReader::next()
 {
     long double start_time = time(0);
     int read_status = evRead(evioFileHandle,buffer,MAXEVIOBUF);
-    cout << "read status = " << read_status << endl;
+    //cout << "read status = " << read_status << endl;
     long double end_time   = time(0);
     //cout << " measured = " << start_time << " " << end_time << endl;
-    if(read_status==0){
+    if(read_status!=-1){
         readTimeTotalMS += (end_time-start_time)*1000.0;
         numberOfEventsRead += 1;
         dataEvent.init(buffer,MAXEVIOBUF);

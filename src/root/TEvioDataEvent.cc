@@ -37,6 +37,18 @@ TArrayD   TEvioDataEvent::getDoubleArray(int tag, int num)
     return darray;
 }
 
+TArrayF   TEvioDataEvent::getFloatArray(int tag, int num)
+{
+  vector<float> *vptr = dataEvent.getFloatVector(tag,num);
+  TArrayF iarray;
+  if(vptr==NULL){
+    cout << " ERROR in getting the " << tag << " " << num << endl;
+    return iarray;
+  }
+  iarray.Set(vptr->size(),vptr->data());
+  return iarray;
+}
+
 TArrayI   TEvioDataEvent::getIntegerArray(int tag, int num)
 {
     vector<int32_t> *vptr = dataEvent.getIntegerVector(tag,num);
