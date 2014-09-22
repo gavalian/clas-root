@@ -26,6 +26,7 @@
 #include "TObject.h"
 #include "TArrayD.h"
 #include "TArrayI.h"
+#include "TClonesArray.h"
 #include "TEvioDataBank.h"
 #include "TEvioDataEvent.h"
 
@@ -85,6 +86,7 @@ TEvioFileReader();
 
  void getEvent(TEvioDataEvent &event);
 
+ //TClonesArray  *getFlashADC(int tag, int num);
 /** An operator = if one is needed */
 /* const TEvioFileReader &operator=(const TEvioFileReader &obj); */
 

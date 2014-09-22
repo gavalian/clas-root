@@ -7,7 +7,9 @@
    * Loading shared library of evio-root package.
    */
   gSystem->Load("../lib/libEvioRoot.so");
-  
+  //gSystem->SetOptStat(11111);
+  //gSystem->SetFitStat(11111);
+
   /**
    * TEvioFileReader - interface to EVIO file. reads events in sequence from one file.
    *                   To chain several files use TEvioDataSource class.
@@ -28,7 +30,9 @@
   TH1F  *H1_PRES   = new TH1F("H1_PRES","",100,-1.5,1.5);
   TH2F  *H1_PRES_VS_P   = new TH2F("H1_PRES_VS_P","",100,0.0,5.0,100,-1.5,1.5);
 
-  TH1F  *H1_MASS   = new TH1F("H1_MASS","",100,0.9,1.1);
+  TH1F  *H1_MASS   = new TH1F("H1_MASS","",100,-0.5,1.4);
+  TH1F  *H1_MULT   = new TH1F("H1_MULT","",100,-0.5,6.5);
+  TH2F  *H1_M_VS_P = new TH2F("H1_M_VS_P","",100,0.0,5.2,100,-0.5,1.4);
   TH2F  *H1_B_VS_P = new TH2F("H1_B_VS_P","",100,0.0,5.2,100,0.4,1.2);
 
   double Chi2Range = 30.0;
@@ -45,6 +49,7 @@
   //for(int nev = 0; nev < 300; nev++){
     //reader.next();
     icounter++;
+    if(icounter%100==0) cout << "-------> processed " << icounter << endl;
     /**
      * initilize the event with the current buffer read from the file.
      */
@@ -52,6 +57,8 @@
 
     TArrayF mass = event.getFloatArray(4501,4);
     TArrayF beta = event.getFloatArray(4501,5);
+    TArrayF scpath = event.getFloatArray(4501,16);
+    TArrayF sctime = event.getFloatArray(4501,17);
     TArrayF px   = event.getFloatArray(4501,13);
     TArrayF py   = event.getFloatArray(4501,14);
     TArrayF pz   = event.getFloatArray(4501,15);
@@ -65,7 +72,7 @@
     TArrayF chi2pcal   = event.getFloatArray(4501,25);
     TArrayF chi2ecin   = event.getFloatArray(4501,29);
     TArrayF chi2ecout  = event.getFloatArray(4501,29);
-
+    int multCounter = 0;
     if(mass.GetSize()>0){
       for(int loop = 0; loop < mass.GetSize(); loop++){
 	TVector3  pvec(px.At(loop),py.At(loop),pz.At(loop));
@@ -74,8 +81,13 @@
 	//cout << " counter = " << icounter << "  mom = "  << pvecg.Mag() << endl;
 	H1_PRES.Fill((pvec.Mag()-pvecg.Mag())/pvecg.Mag());
 	H1_PRES_VS_P.Fill(pvecg.Mag(),(pvec.Mag()-pvecg.Mag())/pvecg.Mag());
-	H1_MASS->Fill(beta.At(loop));
-	//cout << "entry = " << loop << "  mass = " << mass.At(loop) << endl;
+	if(sctime.At(loop)>0.01 && scpath.At(loop)>10.0){
+	  H1_MASS->Fill(mass.At(loop));
+	  H1_M_VS_P->Fill(pvecg.Mag(),mass.At(loop));
+	  multCounter++;
+	}
+	//cout << "entry = " << loop << "  mass = " << mass.At(loop) << "  time = " << sctime.At(loop) 
+	//<< " path = " << scpath.At(loop) << endl;
 	//cout << "entry = " << loop << "  mom = " << pvec.Mag() << "  beta = " << beta.At(loop) << endl;
 	H1_B_VS_P->Fill(pvec.Mag(),beta.At(loop));
 
@@ -92,7 +104,7 @@
 	}
       }
     }
-
+    H1_MULT->Fill(multCounter);
   }
   
   cout << " Events in the FILE = " << icounter << endl;
@@ -108,9 +120,10 @@
   c1->cd(2);
   H1_B_VS_P->Draw("box");
   c1->cd(3);
-  H1_PRES->Draw();
+  //H1_PRES->Draw();
+  H1_MULT->Draw();
   c1->cd(4);
-  H1_PRES_VS_P->Draw();
+  H1_M_VS_P->Draw();
 
   TCanvas *c2 = new TCanvas("c2","",800,700);
   c2->Divide(2,2);

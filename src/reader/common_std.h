@@ -2,6 +2,10 @@
  * Definitions of integers. ROOT CINT has problems parsing stdint.h file.
  * this file defines commonly used integers to avoid problems with CINT.
  */
+
+#ifndef __COMMON_STD__
+#define __COMMON_STD__
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -20,6 +24,19 @@ typedef unsigned __INT16_TYPE__ uint16_t;
 #ifndef int16_t
 typedef __INT16_TYPE__ int16_t;
 #endif
+
+#ifndef int64_t
+typedef long long int64_t;
+#endif
+/*
+typedef struct CompositeADCRaw {
+  int slot;
+  int triger;
+  int time;
+  int channel;
+  //std::vector<int16_t> samples;
+  };*/
+
 /*
 #ifndef uint8_t
 typedef unsigned __INT8_TYPE__ uint8_t;
@@ -29,6 +46,8 @@ typedef unsigned __INT8_TYPE__ uint8_t;
 typedef __INT8_TYPE__ int8_t;
 #endif
 */
+
+#endif
 /**
  * End 
  */

@@ -16,8 +16,7 @@ TEvioFileReader::TEvioFileReader()
 {
   //cout << "*********************************************************" << endl;
   //cout << "*  Initializing EvioROOT library implementing interface *" << endl;
-  //cout << "*********************************************************" << endl;
-  
+  //cout << "*********************************************************" << endl;  
 }
 /*
 TEvioFileReader::TEvioFileReader(const TEvioFileReader &obj)
@@ -44,6 +43,11 @@ bool TEvioFileReader::next()
 {
   return reader.next();
 }
+
+/*
+TClonesArray  *TEvioFileReader::getFlashADC(int tag, int num){
+  TClonesArray *fcaADCStore  = new TClonesArray("TADCClass",4);
+  }*/
 
 TArrayI *TEvioFileReader::getArrayInt(int tag, int num)
 {

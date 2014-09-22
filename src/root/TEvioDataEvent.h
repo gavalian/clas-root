@@ -16,6 +16,8 @@
 #include "TArrayF.h"
 #include "TArrayD.h"
 #include "TArrayI.h"
+#include "TClonesArray.h"
+#include "TADCClass.h"
 #include "EvioDataEvent.h"
 
 using namespace std;
@@ -40,6 +42,9 @@ void init(uint32_t *ptr, int len);
 TArrayF   getFloatArray(int tag, int num);
 TArrayD   getDoubleArray(int tag, int num);
 TArrayI   getIntegerArray(int tag, int num);
+
+
+TClonesArray  *getFlashADC(int tag, int num);
 EvioDataEvent &getDataEvent(){ return dataEvent;};
 /** An operator = if one is needed */
 /* const TEvioDataEvent &operator=(const TEvioDataEvent &obj); */

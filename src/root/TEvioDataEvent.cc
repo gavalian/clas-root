@@ -24,6 +24,23 @@ void TEvioDataEvent::init(uint32_t *ptr, int len)
 {
     dataEvent.init(ptr,len);
 }
+
+TClonesArray  *TEvioDataEvent::getFlashADC(int tag, int num){
+
+  vector<CompositeADC_t>  vec = dataEvent.getCompositeData(tag,num);
+  TClonesArray *fcaADCStore  = new TClonesArray("TADCClass",4);
+  int nADCStore = 0;
+  for(int loop = 0; loop < vec.size();loop++){
+    TADCClass class_adc(vec[loop].slot,vec[loop].channel,(int) vec[loop].samples.size());
+    for(int vloop = 0; vloop < vec[loop].samples.size(); vloop++)
+      class_adc.SetValue(loop,vec[loop].samples[vloop]);
+    TClonesArray &tADCStore = *fcaADCStore;
+    new(tADCStore[nADCStore++]) TADCClass(class_adc);
+  }
+  return fcaADCStore;
+  //cout << " Readnig composite data size = " << vec.size() << endl;
+}
+
 /* const TEvioDataEvent &TEvioDataEvent::operator=(const TEvioDataEvent &obj){} */
 TArrayD   TEvioDataEvent::getDoubleArray(int tag, int num)
 {

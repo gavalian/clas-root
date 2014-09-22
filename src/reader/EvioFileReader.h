@@ -21,7 +21,7 @@
 #include "common_std.h"
 
 #ifndef MAXEVIOBUF
-#define MAXEVIOBUF   4000000
+#define MAXEVIOBUF   400000
 #endif
 
 using namespace std;

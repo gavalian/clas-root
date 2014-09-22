@@ -26,10 +26,10 @@ if os.getenv('ROOTSYS') == None:
 #  Loaded the Library Files.
 #-----------------------------------------------------------------------
 #env = Environment(CPPPATH=["/opt/local/include","include",".","src/evioroot","src/reader"])
-env = Environment(CPPPATH=["/opt/local/include","include",".","src/root","src/reader"])
+env = Environment(CPPPATH=["/opt/local/include","include",".","src/root","src/reader","src/tools"])
 env.Append(ENV = os.environ)
 env.Append(CPPPATH=["src/root","src/evio"])
-env.Append(CCFLAGS=["-O2","-fPIC","-m64","-fmessage-length=0"])
+env.Append(CCFLAGS=["-O2","-fPIC","-m64","-fmessage-length=0","-g"])
 #env.Append(CCFLAGS=["-O2","-fPIC","-m32","-fmessage-length=0"])
 env.Append(LIBPATH=["/opt/local/lib","/usr/lib","lib"])
 #env.Append(LIBS=["iG5io"])
@@ -42,7 +42,7 @@ if ARGUMENTS.get('verbose') != '1':
    print 'Entering quite mode. type scons verbose=1 for more output'
 #   env['CXXCOMSTR']  = "--> Compiling : $TARGET"
 #   env['CCCOMSTR']   = "--> Compiling : $TARGET"
-#   env['LINKCOMSTR'] = "[==] --> Linking   : $TARGET"
+   env['LINKCOMSTR'] = "[==] --> Linking : $TARGET"
 #   env['ARCOMSTR']   = "[==] --> Archiving : $TARGET"
    env.Append(CCFLAGS=["-w"])
 
@@ -78,15 +78,24 @@ env = conf.Finish()
 #rootcint -f TEventReaderDict.cc -c -p -I../writer TEventReader.h TEventReaderLinkDef.h
 #env.Command('env','','env | grep LD_',ENV = {'LD_LIBRARY_PATH','ROOT'})
 env.Command('TEvioFileReaderDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioFileReaderDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioFileReader.h src/root/TEvioFileReaderLinkDef.h')
+
+env.Command('TADCClassDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TADCClassDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TADCClass.h src/root/TADCClassLinkDef.h')
 env.Command('TEvioDataBankDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioDataBankDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioDataBank.h src/root/TEvioDataBankLinkDef.h')
 env.Command('TEvioDataDescriptorDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioDataDescriptorDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioDataDescriptor.h src/root/TEvioDataDescriptorLinkDef.h')
 env.Command('TEvioDataEventDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioDataEventDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioDataEvent.h src/root/TEvioDataEventLinkDef.h')
+env.Command('TClas12ReaderDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TClas12ReaderDict.cc -c -p -Isrc/reader -Isrc/tools -Isrc/evio -Isrc/root src/root/TClas12Reader.h src/root/TClas12ReaderLinkDef.h')
+env.Command('TPhysicsEventDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/tools/TPhysicsEventDict.cc -c -p -Isrc/reader -Isrc/tools -Isrc/evio -Isrc/root src/tools/TPhysicsEvent.h src/tools/TPhysicsEventLinkDef.h')
+env.Command('TEventOperationDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/tools/TEventOperationDict.cc -c -p -Isrc/reader -Isrc/tools -Isrc/evio -Isrc/root src/tools/TEventOperation.h src/tools/TEventOperationLinkDef.h')
+
 
 initROOTLibrary(env)
 
 listEVIOLIB = glob.glob('src/evio/*.cc') + glob.glob('src/evio/*.c')
 listROOTLIB = glob.glob('src/root/*.cc')
 listCPPLIB  = glob.glob('src/reader/*.cc')
+listTOOLS   = glob.glob('src/tools/*.cc')
+listDECODER = ['src/main/runCompositeDecoder.cc']
 
-env.SharedLibrary(target="lib/libEvioRoot.so",source = listROOTLIB + listEVIOLIB + listCPPLIB)
+env.SharedLibrary(target="lib/libEvioRoot.so",source = listROOTLIB + listEVIOLIB + listCPPLIB + listTOOLS)
 env.Library(target="lib/libEvioClas12.a",source = listCPPLIB)
+env.Program(target="bin/runCompositeDecoder",source = listEVIOLIB + listCPPLIB + listDECODER)

@@ -14,6 +14,7 @@
 #include <vector>
 #include <map>
 #include "EvioDataBank.h"
+#include "EvioCompositeDecoder.h"
 #include "common_std.h"
 
 #ifndef MAXEVIOBUFFER
@@ -45,9 +46,14 @@ public:
   
   vector<float>   *getFloatVector(int tag, int num);
   vector<double>  *getDoubleVector(int tag, int num);
-  vector<int32_t> *getIntegerVector(int tag, int num);
-  
+  vector<int32_t> *getIntegerVector(int tag, int num);  
   void getBank(EvioDataBank &bank, int tag, int num = 0);
-  
+  void getList();
+  vector<CompositeADC_t>  getCompositeData(int tag, int num);
+  uint8_t          getInt8 (char *data, int offset);
+  uint16_t         getInt16(char *data, int offset);
+  uint32_t         getInt32(char *data, int offset);
+   int64_t         getInt64(char *data, int offset);
+  void             decodeCompositeData(char *data, int size);
 };
 #endif
