@@ -137,6 +137,9 @@ vector<CompositeADC_t>  EvioDataEvent::getCompositeData(int tag, int num){
 	  for(int loop = 0; loop < decdata.size();loop++){
 	    //result.insert(result.end(), decoder.getData().begin(), decoder.getData().end());
 	    result.push_back(decdata[loop]);
+	    //for(int i = 0; i < decdata[loop].samples.size(); i++){
+	      //cout << " " << decdata[loop].samples[i];
+	    //} //cout << endl;
 	  }
 	} catch (exception e){
 	  cout << "ERROR" << endl;
@@ -213,8 +216,8 @@ void EvioDataEvent::decodeCompositeData(char *data, int size){
     uint8_t  chan    = getInt8(data,offset);
     uint32_t samples = getInt32(data,offset+1);
     offset = offset + 1 + 4;
-    cout << " CHANNEL = " << (unsigned int) chan << "  SAMPLES = " << (unsigned int) samples << "  " << 
-      offset + samples*sizeof(short) << "  " << size << endl;;
+    //cout << " CHANNEL = " << (unsigned int) chan << "  SAMPLES = " << (unsigned int) samples << "  " << 
+    //offset + samples*sizeof(short) << "  " << size << endl;;
     if(offset + samples*sizeof(short) > size) break;
     cout << " scanning channels" << endl;
     for(int loop = 0; loop < samples; loop++){

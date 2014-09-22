@@ -32,8 +32,11 @@ TClonesArray  *TEvioDataEvent::getFlashADC(int tag, int num){
   int nADCStore = 0;
   for(int loop = 0; loop < vec.size();loop++){
     TADCClass class_adc(vec[loop].slot,vec[loop].channel,(int) vec[loop].samples.size());
-    for(int vloop = 0; vloop < vec[loop].samples.size(); vloop++)
-      class_adc.SetValue(loop,vec[loop].samples[vloop]);
+    //cout << " SLOT = " << vec[loop].slot << " CHANNEL = " << vec[loop].channel << " SIZE = " << (int) vec[loop].samples.size() << endl;
+    for(int vloop = 0; vloop < vec[loop].samples.size(); vloop++){
+      class_adc.SetValue(vloop,vec[loop].samples[vloop]);
+      //cout << " " << 
+    }
     TClonesArray &tADCStore = *fcaADCStore;
     new(tADCStore[nADCStore++]) TADCClass(class_adc);
   }
