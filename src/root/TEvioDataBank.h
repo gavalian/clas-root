@@ -24,14 +24,6 @@
 
 //#define MAXEVIOBUF   1000000
 
-#ifndef uint32_t
-typedef unsigned __INT32_TYPE__ uint32_t;
-#endif
-
-#ifndef int32_t
-typedef __INT32_TYPE__ int32_t;
-#endif
-
 using namespace std;
 
 //using namespace evio;

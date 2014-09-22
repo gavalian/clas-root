@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#if (defined(__APPLE__) && defined(__MACH__))
+
 #ifndef uint32_t
 typedef unsigned __INT32_TYPE__ uint32_t;
 #endif
@@ -27,6 +29,13 @@ typedef __INT16_TYPE__ int16_t;
 
 #ifndef int64_t
 typedef long long int64_t;
+#endif
+
+#else 
+
+#include <stdint.h>
+#include <string.h>
+
 #endif
 /*
 typedef struct CompositeADCRaw {

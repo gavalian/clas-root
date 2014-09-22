@@ -34,9 +34,7 @@
 #define MAXEVIOBUF   4000000
 #endif
 
-#ifndef uint32_t
-typedef unsigned __INT32_TYPE__ uint32_t;
-#endif
+
 //#unsigned __INT32_TYPE__
 
 using namespace std;

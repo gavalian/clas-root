@@ -10,7 +10,7 @@
 #include <string>
 #include <cmath>
 #include <vector>
-
+#include "common_std.h"
 
 using namespace std;
 
