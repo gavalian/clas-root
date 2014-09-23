@@ -8,8 +8,15 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+//#include <stdint.h>
+//#include <sys/types.h>
 
-#if (defined(__APPLE__) && defined(__MACH__))
+#if (defined(__APPLE__) && defined(__MACH__) && (__MAC_10_9))
+
+#ifndef uint8_t
+typedef unsigned __INT8_TYPE__ uint8_t;
+#endif
+
 
 #ifndef uint32_t
 typedef unsigned __INT32_TYPE__ uint32_t;
