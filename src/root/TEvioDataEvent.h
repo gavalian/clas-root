@@ -16,6 +16,7 @@
 #include "TArrayF.h"
 #include "TArrayD.h"
 #include "TArrayI.h"
+#include "TArrayC.h"
 #include "TClonesArray.h"
 #include "TADCClass.h"
 #include "EvioDataEvent.h"
@@ -38,7 +39,7 @@ TEvioDataEvent();
 /** Copy Constructor if one is needed */
 /*TEvioDataEvent( const TEvioDataEvent &obj); */ 
 void init(uint32_t *ptr, int len);
-
+TArrayC   getCharArray(int tag, int num);
 TArrayF   getFloatArray(int tag, int num);
 TArrayD   getDoubleArray(int tag, int num);
 TArrayI   getIntegerArray(int tag, int num);

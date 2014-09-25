@@ -76,11 +76,11 @@ TEvioFileReader();
  bool next();
 
  vector<double>  *getDoubleVector(int tag, int num);
- TArrayD *getArrayDouble(int tag, int num);
- TArrayI *getArrayInt(int tag, int num);
+ TArrayD         *getArrayDouble(int tag, int num);
+ TArrayI         *getArrayInt(int tag, int num);
 
- TEvioDataBank *getBank(int tag, int num = 0);
- void           getBank(TEvioDataBank& bank,int tag, int num = 0);
+ TEvioDataBank   *getBank(int tag, int num = 0);
+ void             getBank(TEvioDataBank& bank,int tag, int num = 0);
 
  void getEvent(TEvioDataEvent &event);
 

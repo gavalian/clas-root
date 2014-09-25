@@ -97,6 +97,21 @@ vector<float>  *EvioDataEvent::getFloatVector(int tag, int num)
   return new vector<float>();
 }
 
+vector<uint8_t> *EvioDataEvent::getVectorInt8(int tag, int num){
+  evio::evioBankIndex b0(buffer,0);
+  evio::bankIndex b;
+  if(b0.tagNumExists(evio::tagNum(tag,num))){
+    b = b0.getBankIndex(evio::tagNum(tag,num));
+    //cout << " bank found index = " << b.bankLength << "  data length = " << b.dataLength << endl;
+    int dataLength = b.dataLength;
+    //const uint8_t *data_ptr = b0.getData<uint8_t>(b,&dataLength);
+    //cout << "  Data Length at Get = " << dataLength << endl;
+    vector<uint8_t> *vec_ptr = new vector<uint8_t>(dataLength);
+    memcpy(vec_ptr->data(),b.data, dataLength*sizeof(uint8_t));
+    return vec_ptr;
+  }
+  return new vector<uint8_t>();
+}
 /**
  * returns a integer vector containing data from a leaf for given tag and num.
  */
@@ -106,6 +121,7 @@ vector<int32_t> *EvioDataEvent::getIntegerVector(int tag, int num)
   evio::bankIndex b;
   if(b0.tagNumExists(evio::tagNum(tag,num))){
     b = b0.getBankIndex(evio::tagNum(tag,num));
+
     int dataLength;
     const int32_t *data_ptr = b0.getData<int32_t>(b,&dataLength);
     vector<int32_t> *vec_ptr = new vector<int32_t>(dataLength);

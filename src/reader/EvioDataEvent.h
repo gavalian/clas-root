@@ -43,7 +43,8 @@ public:
   ~EvioDataEvent();
 
   void init(uint32_t *ptr, int len);
-  
+
+  vector<uint8_t> *getVectorInt8(int tag, int num);
   vector<float>   *getFloatVector(int tag, int num);
   vector<double>  *getDoubleVector(int tag, int num);
   vector<int32_t> *getIntegerVector(int tag, int num);  

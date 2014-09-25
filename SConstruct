@@ -78,7 +78,7 @@ env = conf.Finish()
 #rootcint -f TEventReaderDict.cc -c -p -I../writer TEventReader.h TEventReaderLinkDef.h
 #env.Command('env','','env | grep LD_',ENV = {'LD_LIBRARY_PATH','ROOT'})
 env.Command('TEvioFileReaderDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioFileReaderDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioFileReader.h src/root/TEvioFileReaderLinkDef.h')
-
+env.Command('TFileEvioDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TFileEvioDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TFileEvio.h src/root/TFileEvioLinkDef.h')
 env.Command('TADCClassDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TADCClassDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TADCClass.h src/root/TADCClassLinkDef.h')
 env.Command('TEvioDataBankDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioDataBankDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioDataBank.h src/root/TEvioDataBankLinkDef.h')
 env.Command('TEvioDataDescriptorDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioDataDescriptorDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioDataDescriptor.h src/root/TEvioDataDescriptorLinkDef.h')
