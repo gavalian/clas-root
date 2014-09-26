@@ -42,7 +42,7 @@ private:
     uint32_t  buffer[MAXEVIOBUF];
     string    currentFileName;
     EvioDataEvent  dataEvent;
-  
+    uint32_t fileEventsCount;
 public:
 
 /** Default Constructor */
@@ -54,15 +54,16 @@ EvioFileReader();
  void close();
  
  bool next();
-
+ int               getEntries();
  vector<double>   *getDoubleVector(int tag, int num);
  vector<int32_t>  *getIntVector(int tag, int num);
  void              getBank(EvioDataBank& bank,int tag, int num = 0);
  string            getDataFormat(int tag, int num);
+ int               readEvent(int eventnum);
 
  void  getEvent(EvioDataEvent &event);
  
- const EvioDataEvent &getEvent();
+ EvioDataEvent &getEvent();
 
  //void getEvent();
  /** An operator = if one is needed */

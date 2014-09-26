@@ -16,6 +16,7 @@ EvioFileReader::EvioFileReader()
   cout << "***************************************************************" << endl;
   cout << "*  Initializing EvioFileReader library implementing interface *" << endl;
   cout << "***************************************************************" << endl;
+  fileEventsCount = 0;
 }
 /*
 TEvioFileReader::TEvioFileReader(const TEvioFileReader &obj)
@@ -42,12 +43,26 @@ void EvioFileReader::open(const char *filename)
   char file[128];
   currentFileName = filename;
   sprintf(file,"%s",filename);
-  evOpen(file,"r",&evioFileHandle);
+  evOpen(file,"ra",&evioFileHandle);
+  evIoctl(evioFileHandle, "e", (void *)&fileEventsCount);
   numberOfEventsRead = 0;
   readTimeTotalMS    = 0.0;
-  cout << "***** OPENED FILE : " << filename << endl;
+  cout << "***** OPENED FILE : " << filename << "  NEVENT = " << fileEventsCount << endl;
+  uint32_t evCount, len = 0L, bufLen;
+  int i,status;
+  const uint32_t **pTable;
+  /*status = evGetRandomAccessTable(evioFileHandle, &pTable, &len);
+    printf("  i      pointers\n");
+    printf("-------------------\n");
+    for (i=0; i < len; i++) {
+        printf("  %d    %p\n", i, pTable[i]);
+    }*/
 }
 
+int   EvioFileReader::getEntries()
+{
+  return fileEventsCount;
+}
 /**
  * Reads next event into internal buffer. returns true if there is an event in the file,
  * and false if end of file is reached.
@@ -69,7 +84,19 @@ bool EvioFileReader::next()
     return false;
 }
 
-const EvioDataEvent &EvioFileReader::getEvent()
+int   EvioFileReader::readEvent(int eventnum)
+{
+  const uint32_t *evioptr;
+  uint32_t        bufferlen = 0;
+  int read_status = evReadRandom(evioFileHandle,&evioptr,&bufferlen,eventnum+1);
+  //cout << "\033[1;34m Read Event # " << eventnum << "  length = " << bufferlen
+  //   << "  status = " << read_status
+  //    <<  "\033[0;0m" << endl;
+  dataEvent.init(evioptr,bufferlen);
+  //dataEvent.init(buffer,bufferlen);
+}
+
+EvioDataEvent &EvioFileReader::getEvent()
 {
     return dataEvent;
 }

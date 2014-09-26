@@ -28,8 +28,8 @@ int main(int argc, const char** argv){
     if(ic%1000==0) cout << " processed -----> " << ic << endl;
     reader->getEvent(*event);
     //event->getList();
-    event->getCompositeData(57601,0);
-    //vector<int32_t> *buffer = event->getIntegerVector(57601,0);
+    //event->getCompositeData(57601,0);
+    vector<int32_t> *buffer = event->getIntegerVector(1,1);
     //cout << " buffer size = " << buffer->size() << endl;
   }
   cout << "processed " << ic << " events " << endl;

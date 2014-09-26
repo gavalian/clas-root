@@ -48,10 +48,83 @@ void EvioDataEvent::getList(){
   }
   
 }
+/*
+evio::bankIndex   getBankIndex(int tag, int num){
+
+  evio::evioBankIndex b0(buffer,0);
+  evio::bankIndex b;
+  if(b0.tagNumExists(evio::tagNum(tag,num))){
+    b = b0.getBankIndex(evio::tagNum(tag,num));
+  }
+  return b;
+}*/
+
+int8_t         *EvioDataEvent::geti8  ( int tag, int num , int *len)
+{
+
+}
+
+int32_t        *EvioDataEvent::geti32 ( int tag, int num , int *len)
+{
+  evio::evioBankIndex b0(buffer,0);
+  evio::bankIndex b;
+  //evio::bankIndex b = getBankIndex(tag,num);
+
+  if(b0.tagNumExists(evio::tagNum(tag,num))){
+    if(b.dataLength>0){
+      int32_t *buf = new int32_t[b.dataLength];
+      memcpy(buf,b.data,b.dataLength*sizeof(uint32_t));
+      *len = b.dataLength;
+      return buf;
+    }
+  }
+  *len = 0;
+  return NULL;
+}
+
+float          *EvioDataEvent::getf   ( int tag, int num , int *len)
+{
+  evio::evioBankIndex b0(buffer,0);
+  evio::bankIndex b;
+  //evio::bankIndex b = getBankIndex(tag,num);
+
+  if(b0.tagNumExists(evio::tagNum(tag,num))){
+    b = b0.getBankIndex(evio::tagNum(tag,num));
+    if(b.dataLength>0){
+      float *buf = new float[b.dataLength];
+      memcpy(buf,b.data,b.dataLength*sizeof(float));
+      *len = b.dataLength;
+      return buf;
+    }
+  }
+  *len = 0;
+  return NULL;
+}
+
+double         *EvioDataEvent::getd   ( int tag, int num , int *len)
+{
+  evio::evioBankIndex b0(buffer,0);
+  evio::bankIndex b;
+  //evio::bankIndex b = getBankIndex(tag,num);
+
+  if(b0.tagNumExists(evio::tagNum(tag,num))){
+    b = b0.getBankIndex(evio::tagNum(tag,num));
+    if(b.dataLength>0){
+      double *buf = new double[b.dataLength];
+      memcpy(buf,b.data,b.dataLength*sizeof(double));
+      *len = b.dataLength;
+      return buf;
+    }
+  }
+  *len = 0;
+  return NULL;
+}
+
+
 /**
  * initilizes the event with given evio buffer.
  */
-void EvioDataEvent::init(uint32_t *ptr, int len)
+void EvioDataEvent::init(const uint32_t *ptr, int len)
 {
   //cout << " initializing event with len = " << len << endl;
   memcpy(buffer,ptr,len*sizeof(int32_t));
@@ -121,11 +194,11 @@ vector<int32_t> *EvioDataEvent::getIntegerVector(int tag, int num)
   evio::bankIndex b;
   if(b0.tagNumExists(evio::tagNum(tag,num))){
     b = b0.getBankIndex(evio::tagNum(tag,num));
-
-    int dataLength;
-    const int32_t *data_ptr = b0.getData<int32_t>(b,&dataLength);
+    int dataLength = b.dataLength;
+    //cout << " success : length = " << b.dataLength << endl; 
+    //const int32_t *data_ptr = b0.getData<int32_t>(b,&dataLength);
     vector<int32_t> *vec_ptr = new vector<int32_t>(dataLength);
-    memcpy(vec_ptr->data(),data_ptr,dataLength*sizeof(int32_t));
+    memcpy(vec_ptr->data(),b.data,dataLength*sizeof(int32_t));
     return vec_ptr;
   }
   return new vector<int32_t>();

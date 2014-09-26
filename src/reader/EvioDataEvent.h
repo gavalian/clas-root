@@ -35,6 +35,7 @@ private:
 
   uint32_t buffer[MAXEVIOBUFFER];
 
+
 public:
 
   EvioDataEvent();
@@ -42,14 +43,24 @@ public:
   EvioDataEvent(const EvioDataEvent& orig);
   ~EvioDataEvent();
 
-  void init(uint32_t *ptr, int len);
+  void init(const uint32_t *ptr, int len);
 
+
+  //evio::bankIndex   getBankIndex(int tag, int num);
+  int32_t          *geti32 ( int tag, int num , int *len);
+  int8_t           *geti8  ( int tag, int num , int *len);
+  float            *getf   ( int tag, int num , int *len);
+  double           *getd   ( int tag, int num , int *len);
+
+  
   vector<uint8_t> *getVectorInt8(int tag, int num);
   vector<float>   *getFloatVector(int tag, int num);
   vector<double>  *getDoubleVector(int tag, int num);
   vector<int32_t> *getIntegerVector(int tag, int num);  
   void getBank(EvioDataBank &bank, int tag, int num = 0);
   void getList();
+
+
   vector<CompositeADC_t>  getCompositeData(int tag, int num);
   uint8_t          getInt8 (char *data, int offset);
   uint16_t         getInt16(char *data, int offset);
