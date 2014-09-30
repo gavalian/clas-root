@@ -1,7 +1,13 @@
 #include <iostream>
 #include "EvioFileReader.h"
+#include "EvioBankIndex.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "evioUtil.hxx"
+#include "evioBankIndex.hxx"
+
+void  decodeDeserialize(uint32_t *buffer);
+void  decodeIndexing(uint32_t *buffer);
 
 
 int main(int argc, const char** argv){
@@ -17,20 +23,46 @@ int main(int argc, const char** argv){
   //cout << "[Decoder]-----> opennign file : " << file << endl;
   //EvioDataEvent  event;
   EvioFileReader *reader = new EvioFileReader();
-  EvioDataEvent  *event  = new EvioDataEvent();
+  EvioBankIndex  *bankIndex = new EvioBankIndex();
   //reader->open(filename.c_str());
   
   reader->open(file);
 
   int ic = 0;
-  while(reader->next()){
+  //  while(reader->next()){
+  for(int loop = 0; loop < 4500; loop++){
     ic++;
-    if(ic%1000==0) cout << " processed -----> " << ic << endl;
-    reader->getEvent(*event);
-    //event->getList();
-    //event->getCompositeData(57601,0);
-    vector<int32_t> *buffer = event->getIntegerVector(1,1);
-    //cout << " buffer size = " << buffer->size() << endl;
+    //if(ic%1000==0) cout << " processed -----> " << ic << endl;
+    reader->readEvent(loop+1);
+    //reader->getEvent(*event);
+    //cout << "  starting the event indexing " << endl;
+    //    for(int )
+    //for(int i = 0; i < 250000 ; i ++){
+    reader->getEvent().getBankIndex().list();
+    //decodeDeserialize(reader->getEvent().getEventBuffer());
+    //decodeIndexing(reader->getEvent().getEventBuffer());
+    //bankIndex->initBankIndex(reader->getEvent().getEventBuffer());
+    //bankIndex->list();
+    //} 
   }
   cout << "processed " << ic << " events " << endl;
+}
+
+
+void  decodeIndexing(uint32_t *buffer){
+  evio::evioBankIndex b0(buffer,0);
+}
+
+void  decodeDeserialize(uint32_t *buffer){
+  evio::evioDOMTree event(buffer);
+  evio::evioDOMNodeListP fullList     = event.getNodeList();
+  evio::evioDOMNodeList::const_iterator iter;
+  int tag = 0;
+  int num = 0;
+  for(iter=fullList->begin(); iter!=fullList->end(); iter++) {
+    tag = (*iter)->tag;
+    num = (*iter)->num;
+    //cout << "bank type,tag,num are: " << hex << "  0x" << (*iter)->getContentType() << dec << "  "  << (*iter)->tag
+   //<< "  " << (int)((*iter)->num) << endl;
+  }
 }

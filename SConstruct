@@ -80,6 +80,7 @@ env = conf.Finish()
 env.Command('TEvioFileReaderDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioFileReaderDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioFileReader.h src/root/TEvioFileReaderLinkDef.h')
 env.Command('TFileEvioDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TFileEvioDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TFileEvio.h src/root/TFileEvioLinkDef.h')
 env.Command('TTreeEvioDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TTreeEvioDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TTreeEvio.h src/root/TTreeEvioLinkDef.h')
+env.Command('TXMLBankDictionaryDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TXMLBankDictionaryDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TXMLBankDictionary.h src/root/TXMLBankDictionaryLinkDef.h')
 env.Command('TBankDescriptorDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TBankDescriptorDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TBankDescriptor.h src/root/TBankDescriptorLinkDef.h')
 env.Command('TADCClassDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TADCClassDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TADCClass.h src/root/TADCClassLinkDef.h')
 env.Command('TEvioDataBankDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioDataBankDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioDataBank.h src/root/TEvioDataBankLinkDef.h')
@@ -91,6 +92,8 @@ env.Command('TEventOperationDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f
 
 
 initROOTLibrary(env)
+
+env.Append(LIBS=["XMLParser","XMLIO"])
 
 listEVIOLIB = glob.glob('src/evio/*.cc') + glob.glob('src/evio/*.c')
 listROOTLIB = glob.glob('src/root/*.cc')

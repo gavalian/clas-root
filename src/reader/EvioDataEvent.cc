@@ -15,6 +15,7 @@
  */
 EvioDataEvent::EvioDataEvent()
 {
+  bankIndex = reinterpret_cast<void *>(new evio::evioBankIndex());
 }
 /**
  * Copy constructor.
@@ -23,7 +24,7 @@ EvioDataEvent::EvioDataEvent()
  */
 EvioDataEvent::EvioDataEvent(const EvioDataEvent& orig)
 {
-    memcpy(buffer,orig.buffer,MAXEVIOBUFFER);
+    //memcpy(buffer,orig.buffer,MAXEVIOBUFFER);
 }
 /**
  * constructor takes pointer to the data, and copies it to internal buffer.
@@ -38,13 +39,19 @@ EvioDataEvent::EvioDataEvent(uint32_t *ptr, int len)
 EvioDataEvent::~EvioDataEvent()
 {
 }
+
+
 void EvioDataEvent::getList(){
   evio::evioDOMTree event(buffer);
   evio::evioDOMNodeListP fullList     = event.getNodeList();
   evio::evioDOMNodeList::const_iterator iter;
+  int tag = 0;
+  int num = 0;
   for(iter=fullList->begin(); iter!=fullList->end(); iter++) {
-    cout << "bank type,tag,num are: " << hex << "  0x" << (*iter)->getContentType() << dec << "  "  << (*iter)->tag
-	 << "  " << (int)((*iter)->num) << endl;
+    tag = (*iter)->tag;
+    num = (*iter)->num;
+    //cout << "bank type,tag,num are: " << hex << "  0x" << (*iter)->getContentType() << dec << "  "  << (*iter)->tag
+	 //<< "  " << (int)((*iter)->num) << endl;
   }
   
 }
@@ -66,20 +73,29 @@ int8_t         *EvioDataEvent::geti8  ( int tag, int num , int *len)
 
 int32_t        *EvioDataEvent::geti32 ( int tag, int num , int *len)
 {
-  evio::evioBankIndex b0(buffer,0);
+  evio::evioBankIndex *biptr  = (reinterpret_cast<evio::evioBankIndex *> (bankIndex));
+  //evio::evioBankIndex b0(buffer,0);
   evio::bankIndex b;
+  //cout << " looking for " << tag << "  " << num << endl;
+  //getList();
   //evio::bankIndex b = getBankIndex(tag,num);
-
-  if(b0.tagNumExists(evio::tagNum(tag,num))){
+  //if(b0.tagNumExists(evio::tagNum(tag,num))){
+  if(biptr->tagNumExists(evio::tagNum(tag,num))){
+    b = biptr->getBankIndex(evio::tagNum(tag,num));
     if(b.dataLength>0){
+      //cout << " DATA found " << endl;
       int32_t *buf = new int32_t[b.dataLength];
-      memcpy(buf,b.data,b.dataLength*sizeof(uint32_t));
+      memcpy(buf,b.data,b.dataLength*sizeof(int32_t));
       *len = b.dataLength;
       return buf;
     }
   }
   *len = 0;
   return NULL;
+}
+
+void            EvioDataEvent::runIndexing(){
+  evio::evioBankIndex b0(buffer,0);
 }
 
 float          *EvioDataEvent::getf   ( int tag, int num , int *len)
@@ -90,6 +106,7 @@ float          *EvioDataEvent::getf   ( int tag, int num , int *len)
 
   if(b0.tagNumExists(evio::tagNum(tag,num))){
     b = b0.getBankIndex(evio::tagNum(tag,num));
+
     if(b.dataLength>0){
       float *buf = new float[b.dataLength];
       memcpy(buf,b.data,b.dataLength*sizeof(float));
@@ -128,6 +145,9 @@ void EvioDataEvent::init(const uint32_t *ptr, int len)
 {
   //cout << " initializing event with len = " << len << endl;
   memcpy(buffer,ptr,len*sizeof(int32_t));
+  eventBankIndex.initBankIndex(&buffer[0]);
+  //(reinterpret_cast<evio::evioBankIndex *> (bankIndex))->parseBuffer(buffer,0);
+  //buffer = ptr;
 }
 /**
  * returns a bank containing double and int arrays filled from a data bank 

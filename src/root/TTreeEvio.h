@@ -20,7 +20,10 @@
 #include "TDirectory.h"
 #include "EvioFileReader.h"
 #include "TBankDescriptor.h"
+#include "TList.h"
+#include "TXMLBankDictionary.h"
 
+ 
 using namespace std;
 //! A Brief Description
 /*
@@ -29,19 +32,28 @@ using namespace std;
 class TTreeEvio  : public TTree {
 
 private:
+
+  bool      kDebugMode;
   
   Double_t  variableD;
   Int_t     variableI;
   Int_t     valueI;
+  Int_t     bankLengthEVNT;
+
+
+
   TBankDescriptor   bankEvnt;
   EvioFileReader *evioReader;
+
+  TList             bankList;
+  vector<int>       bankSizes;
 
 public:
 
 /** Default Constructor */
 
 TTreeEvio();
-TTreeEvio(const char *filename);
+TTreeEvio(const char *filename, bool debug = false);
 
 /** Default Destructor */
 ~TTreeEvio();
@@ -51,6 +63,8 @@ TTreeEvio(const char *filename);
 /** An operator = if one is needed */
 /* const TTreeEvio &operator=(const TTreeEvio &obj); */
 
+void        TestLoop(int nentries);
+
 Long64_t    GetEntries() const;
 Long64_t    GetEntries(const char* selection);
 Long64_t    GetEntriesFast() const;
@@ -58,6 +72,9 @@ Long64_t    GetEntriesFriend() const;
 Long64_t    LoadTree(Long64_t entry);
 void        InitBranches();
 
+void        LoadBranches();
+void        LoadBranch(TBankDescriptor &desc, int entry);
+void        LoadDictionary();
 void        InitBranch(TBankDescriptor &desc);
 void        InitDescriptors();
 

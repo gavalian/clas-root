@@ -18,7 +18,7 @@ using namespace std;
 /*
  * A detailed description
  */
-class TBankDescriptor  {
+class TBankDescriptor  : public TObject {
 
 private:
   string  descName;
@@ -35,6 +35,8 @@ TBankDescriptor(const char *name);
 /** Copy Constructor if one is needed */
 /*TBankDescriptor( const TBankDescriptor &obj); */ 
 
+void   Copy(const char *name, int tag, TBankDescriptor &desc);
+void   Copy(TBankDescriptor &desc);
 void   AddEntry(const char *name, const char *type,int tag, int num);
 int    GetEntries();
 
@@ -50,8 +52,9 @@ int    GetTag(int entry);
 int    GetNum(int entry);
 const char *GetName();
 const char *GetEntryName(int entry);
+const char *GetEntryType(int entry);
 
-
+void Print();
 void SetName(const char *name);
 /** An operator = if one is needed */
 /* const TBankDescriptor &operator=(const TBankDescriptor &obj); */

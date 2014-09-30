@@ -16,6 +16,7 @@
 #include "EvioDataBank.h"
 #include "EvioCompositeDecoder.h"
 #include "common_std.h"
+#include "EvioBankIndex.h"
 
 #ifndef MAXEVIOBUFFER
 #define MAXEVIOBUFFER   4000000
@@ -34,8 +35,9 @@ class EvioDataEvent {
 private:
 
   uint32_t buffer[MAXEVIOBUFFER];
-
-
+  EvioBankIndex   eventBankIndex;
+  //const uint32_t *buffer;
+  void    *bankIndex;
 public:
 
   EvioDataEvent();
@@ -45,18 +47,21 @@ public:
 
   void init(const uint32_t *ptr, int len);
 
-
+  uint32_t         *getEventBuffer()  { return &buffer[0];     };
+  EvioBankIndex    &getBankIndex()    { return eventBankIndex; };
   //evio::bankIndex   getBankIndex(int tag, int num);
   int32_t          *geti32 ( int tag, int num , int *len);
   int8_t           *geti8  ( int tag, int num , int *len);
   float            *getf   ( int tag, int num , int *len);
   double           *getd   ( int tag, int num , int *len);
 
+  void              runIndexing();
   
   vector<uint8_t> *getVectorInt8(int tag, int num);
   vector<float>   *getFloatVector(int tag, int num);
   vector<double>  *getDoubleVector(int tag, int num);
-  vector<int32_t> *getIntegerVector(int tag, int num);  
+  vector<int32_t> *getIntegerVector(int tag, int num);
+
   void getBank(EvioDataBank &bank, int tag, int num = 0);
   void getList();
 

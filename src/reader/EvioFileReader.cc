@@ -51,6 +51,13 @@ void EvioFileReader::open(const char *filename)
   uint32_t evCount, len = 0L, bufLen;
   int i,status;
   const uint32_t **pTable;
+
+/*
+const uint32_t *evioptr;
+  uint32_t        bufferlen = 0;
+  int read_status = evReadRandom(evioFileHandle,&evioptr,&bufferlen,6);
+dataEvent.init(evioptr,bufferlen);
+*/
   /*status = evGetRandomAccessTable(evioFileHandle, &pTable, &len);
     printf("  i      pointers\n");
     printf("-------------------\n");
@@ -90,9 +97,11 @@ int   EvioFileReader::readEvent(int eventnum)
   uint32_t        bufferlen = 0;
   int read_status = evReadRandom(evioFileHandle,&evioptr,&bufferlen,eventnum+1);
   //cout << "\033[1;34m Read Event # " << eventnum << "  length = " << bufferlen
-  //   << "  status = " << read_status
-  //    <<  "\033[0;0m" << endl;
+  //<< "  status = " << read_status
+  //<<  "\033[0;0m" << endl;
+
   dataEvent.init(evioptr,bufferlen);
+  
   //dataEvent.init(buffer,bufferlen);
 }
 

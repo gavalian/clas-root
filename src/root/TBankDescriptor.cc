@@ -34,7 +34,29 @@ void TBankDescriptor::SetName(const char *name)
 /* const TBankDescriptor &TBankDescriptor::operator=(const TBankDescriptor &obj){} */
 void   TBankDescriptor::AddEntry(const char *name, const char *type, int tag, int num)
 {
+	entryNameType.push_back( pair<string,string>(string(name),string(type)) );
+	entryTagNum.push_back( pair<int,int> ( tag,num) );
+}
 
+void   TBankDescriptor::Copy(TBankDescriptor &desc)
+{
+	SetName(desc.GetName());
+	entryTagNum.clear();
+	entryNameType.clear();
+	for(int loop = 0; loop < desc.GetEntries(); loop++){
+		AddEntry(desc.GetEntryName(loop),desc.GetEntryType(loop),desc.GetTag(loop),desc.GetNum(loop));
+	}
+}
+
+
+void   TBankDescriptor::Copy(const char *name, int tag, TBankDescriptor &desc)
+{
+	SetName(name);
+	entryTagNum.clear();
+	entryNameType.clear();
+	for(int loop = 0; loop < desc.GetEntries(); loop++){
+		AddEntry(desc.GetEntryName(loop),desc.GetEntryType(loop),tag,desc.GetNum(loop));
+	}
 }
 
 string TBankDescriptor::GetFormatString()
@@ -97,7 +119,21 @@ const char *TBankDescriptor::GetName()
 	return descName.c_str();
 }
 
+const char *TBankDescriptor::GetEntryType(int entry)
+{
+	return entryNameType[entry].second.c_str();
+}
+
 const char *TBankDescriptor::GetEntryName(int entry)
 {
+	return entryNameType[entry].first.c_str();
+}
 
+void TBankDescriptor::Print(){
+	int nsize = entryNameType.size();
+	cout << " BANK " << GetName() << endl;
+	for(int loop = 0; loop < nsize; loop++){
+		cout << GetEntryName(loop) <<  " : " << GetEntryType(loop)
+			<< " : " << GetTag(loop) << " : " << GetNum(loop) << endl;
+	}
 }
