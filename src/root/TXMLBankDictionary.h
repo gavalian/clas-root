@@ -17,6 +17,8 @@
 #include "TXMLEngine.h"
 #include "TSystem.h"
 #include "TBankDescriptor.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 using namespace std;
 //! A Brief Description
