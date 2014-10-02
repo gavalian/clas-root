@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <evio_dictionary>
     <bank name="FTOF1A" tag="1000" info="Simulated FTOF Pannel 1a Hit Information">
       <section name="true" tag="1001" num="0" info="Digitized information">

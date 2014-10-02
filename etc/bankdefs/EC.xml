@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <evio_dictionary>
 <bank name="EC" tag="1600" info="EC Hit Information">
    <section name="true" tag="1601" num="0" info="Simulated (true) information">

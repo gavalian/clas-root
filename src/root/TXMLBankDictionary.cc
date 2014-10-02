@@ -105,7 +105,7 @@ void   TXMLBankDictionary::ParseSection(TXMLEngine* xml, XMLNodePointer_t sectio
 		//	<< "  " << mapcol[string("name")] << " " << mapcol["num"] << endl; 
 		child = xml->GetNext(child);
 	}
-	cout << "(" << descriptor->GetName() << ")" <<  descriptor->GetFormatString() << endl;
+	//cout << "(" << descriptor->GetName() << ")" <<  descriptor->GetFormatString() << endl;
 	bankDictionary.Add(descriptor);
 }
 

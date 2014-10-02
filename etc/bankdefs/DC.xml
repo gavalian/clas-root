@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <evio_dictionary>
 <bank name="DC" tag="1300" info="Simulated DC Hit Information">
    <section name="true" tag="1301" num="0" info="Digitized information">
