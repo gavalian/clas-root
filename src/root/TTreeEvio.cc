@@ -38,6 +38,57 @@ TTreeEvio::~TTreeEvio()
 {
 }
 
+Int_t       TTreeEvio::GetNRows(const char *branch){
+  TLeafI *leaf = (TLeafI *) GetLeaf(branch,"entries");
+  if(leaf==NULL) return 0;
+  return leaf->GetValue(0);
+}
+
+Double_t    TTreeEvio::GetValue(int row, const char *branch, const char *leaf){
+if(GetNRows(branch)<=row){
+    cout << "TTreeEvio::GetValueI:: Warning : Requested row " << row << " for branch " 
+    << branch << " which has " << GetNRows(branch) << " entries" << endl;
+    return 0;
+  }
+  TLeafD *leafp = (TLeafD *) GetLeaf(branch,leaf);
+  if(leafp==NULL){
+    cout << "TTreeEvio::GetValueI:: ERROR : invalid leaf " << branch << " " << leaf << endl;
+    return 0;
+  }
+
+  return leafp->GetValue(row);
+}
+
+
+Int_t       TTreeEvio::GetValueI(int row,const char *branch, const char *leaf){
+  if(GetNRows(branch)<=row){
+    cout << "TTreeEvio::GetValueI:: Warning : Requested row " << row << " for branch " 
+    << branch << " which has " << GetNRows(branch) << " entries" << endl;
+    return 0;
+  }
+  TLeafI *leafp = (TLeafI *) GetLeaf(branch,leaf);
+  if(leafp==NULL){
+    cout << "TTreeEvio::GetValueI:: ERROR : invalid leaf " << branch << " " << leaf << endl;
+    return 0;
+  }
+
+  return leafp->GetValue(row);
+}
+
+Float_t       TTreeEvio::GetValueF(int row,const char *branch, const char *leaf){
+  if(GetNRows(branch)<=row){
+    cout << "TTreeEvio::GetValueI:: Warning : Requested row " << row << " for branch " 
+    << branch << " which has " << GetNRows(branch) << " entries" << endl;
+    return 0;
+  }
+  TLeafF *leafp = (TLeafF *) GetLeaf(branch,leaf);
+  if(leafp==NULL){
+    cout << "TTreeEvio::GetValueI:: ERROR : invalid leaf " << branch << " " << leaf << endl;
+    return 0;
+  }
+
+  return leafp->GetValue(row);
+}
 
 void        TTreeEvio::TestLoop(int nentries)
 {

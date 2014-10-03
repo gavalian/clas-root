@@ -70,8 +70,13 @@ Long64_t    GetEntries(const char* selection);
 Long64_t    GetEntriesFast() const;
 Long64_t    GetEntriesFriend() const;
 Long64_t    LoadTree(Long64_t entry);
-void        InitBranches();
 
+Int_t       GetNRows(const char *branch);
+Double_t    GetValue(int row, const char *branch, const char *leaf);
+Int_t       GetValueI(int row,const char *branch, const char *leaf);
+Float_t     GetValueF(int row,const char *branch, const char *leaf);
+
+void        InitBranches();
 void        LoadBranches();
 void        LoadBranch(TBankDescriptor &desc, int entry);
 void        LoadDictionary();
