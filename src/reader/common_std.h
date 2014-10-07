@@ -17,7 +17,6 @@
 typedef unsigned __INT8_TYPE__ uint8_t;
 #endif
 
-
 #ifndef uint32_t
 typedef unsigned __INT32_TYPE__ uint32_t;
 #endif
