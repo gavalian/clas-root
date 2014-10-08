@@ -90,6 +90,21 @@ Float_t       TTreeEvio::GetValueF(int row,const char *branch, const char *leaf)
   return leafp->GetValue(row);
 }
 
+Double_t       TTreeEvio::GetValueD(int row,const char *branch, const char *leaf){
+  if(GetNRows(branch)<=row){
+    cout << "TTreeEvio::GetValueD:: Warning : Requested row " << row << " for branch " 
+    << branch << " which has " << GetNRows(branch) << " entries" << endl;
+    return 0;
+  }
+  TLeafD *leafp = (TLeafD *) GetLeaf(branch,leaf);
+  if(leafp==NULL){
+    cout << "TTreeEvio::GetValueI:: ERROR : invalid leaf " << branch << " " << leaf << endl;
+    return 0;
+  }
+
+  return leafp->GetValue(row);
+}
+
 void        TTreeEvio::TestLoop(int nentries)
 {
     evioReader->readEvent(5);
@@ -258,6 +273,8 @@ void        TTreeEvio::LoadBranch(TBankDescriptor &desc, int entry)
         bankExists = false;
         break;
       } else {
+        //cout << " FLOAT ----> Returned length for " << desc.GetEntryName(loop) << " = " << bankLenght 
+        //  << " first value = " << bufferF[0] << "  " << bufferF[1] << endl;
       //cout << " Returned length for " << desc.GetEntryName(loop) << " = " << bankLenght << endl;
         TLeafF *leafF  = (TLeafF *) branch->GetLeaf(desc.GetEntryName(loop));
         leafF->SetLen(bankLenght);
@@ -272,7 +289,8 @@ void        TTreeEvio::LoadBranch(TBankDescriptor &desc, int entry)
         bankExists = false;
         break;
       } else {
-      //cout << " Returned length for " << desc.GetEntryName(loop) << " = " << bankLenght << endl;
+        //cout << " DOUBLE ----> Returned length for " << desc.GetEntryName(loop) << " = " << bankLenght 
+        //<< " first value = " << bufferD[0] << "  " << bufferD[1] << endl;
         TLeafD *leafD  = (TLeafD *) branch->GetLeaf(desc.GetEntryName(loop));
         leafD->SetLen(bankLenght);
         leafD->SetAddress(const_cast<void *> (reinterpret_cast<const void *> (bufferD)));
@@ -285,6 +303,8 @@ void        TTreeEvio::LoadBranch(TBankDescriptor &desc, int entry)
           bankExists = false;
           break;
         } else {
+          //cout << " Returned length for " << desc.GetEntryName(loop) << " = " << bankLenght 
+          //<< " first value = " << bufferI32[0] << "  " << bufferI32[1] << endl;
           TLeafI *leafI  = (TLeafI *) branch->GetLeaf(desc.GetEntryName(loop));
           leafI->SetLen(bankLenght);
           leafI->SetAddress( const_cast<void *> (reinterpret_cast<const void *> (bufferI32)));
@@ -361,6 +381,7 @@ void        TTreeEvio::LoadDictionary()
   banknames.push_back("etc/bankdefs/DC.xml");
   banknames.push_back("etc/bankdefs/FTOF.xml");
   banknames.push_back("etc/bankdefs/EC.xml");
+  banknames.push_back("etc/bankdefs/SEB.xml");
   bankList.Delete();
   TXMLBankDictionary parser;
   for(int loop = 0; loop < banknames.size(); loop++){

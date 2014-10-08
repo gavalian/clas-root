@@ -137,7 +137,7 @@ void *EvioBankIndex::parseBank(const uint32_t *buf, int bankType, int depth,
   case 0xb:
   case 0xf:
     // four-byte types
-    newLeaf=leafHandler(length,bankType,contentType,tag,num,depth,&buf[0],length-dataOffset,&buf[0+2],userArg);
+    newLeaf=leafHandler(length,bankType,contentType,tag,num,depth,&buf[0],length-dataOffset,&buf[dataOffset],userArg);
     break;
 
   case 0x3:
@@ -145,14 +145,14 @@ void *EvioBankIndex::parseBank(const uint32_t *buf, int bankType, int depth,
   case 0x7:
     // one-byte types
     newLeaf=leafHandler(length,bankType,contentType,tag,num,depth,&buf[0],(length-dataOffset)*4-padding,
-                                    (int8_t*)(&buf[dataOffset+2]),userArg);
+                                    (int8_t*)(&buf[dataOffset]),userArg);
     break;
 
   case 0x4:
   case 0x5:
     // two-byte types
     newLeaf=leafHandler(length,bankType,contentType,tag,num,depth,
-                                    &buf[0],(length-dataOffset)*2-padding/2,(int16_t*)(&buf[dataOffset+2]),userArg);
+                                    &buf[0],(length-dataOffset)*2-padding/2,(int16_t*)(&buf[dataOffset]),userArg);
     break;
 
   case 0x8:
@@ -160,7 +160,7 @@ void *EvioBankIndex::parseBank(const uint32_t *buf, int bankType, int depth,
   case 0xa:
     // eight-byte types
     newLeaf=leafHandler(length,bankType,contentType,tag,num,depth,
-                                    &buf[0],(length-dataOffset)/2,(int64_t*)(&buf[dataOffset+2]),userArg);
+                                    &buf[0],(length-dataOffset)/2,(int64_t*)(&buf[dataOffset]),userArg);
     break;
 
   case 0xe:

@@ -75,6 +75,7 @@ Int_t       GetNRows(const char *branch);
 Double_t    GetValue(int row, const char *branch, const char *leaf);
 Int_t       GetValueI(int row,const char *branch, const char *leaf);
 Float_t     GetValueF(int row,const char *branch, const char *leaf);
+Double_t    GetValueD(int row,const char *branch, const char *leaf);
 
 void        InitBranches();
 void        LoadBranches();
