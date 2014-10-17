@@ -68,11 +68,23 @@ evio::bankIndex   getBankIndex(int tag, int num){
 
 int8_t         *EvioDataEvent::geti8  ( int tag, int num , int *len)
 {
-
+  int blen;
+  int8_t *ptr = const_cast<int8_t *> (reinterpret_cast<const int8_t *> (
+  getBankIndex().getBank(tag,num,&blen)));
+  if(blen==0||ptr==NULL) return NULL;
+  *len = blen;
+  return ptr;
 }
 
 int32_t        *EvioDataEvent::geti32 ( int tag, int num , int *len)
 {
+  int blen;
+  int32_t *ptr = const_cast<int32_t *> (reinterpret_cast<const int32_t *> (
+  getBankIndex().getBank(tag,num,&blen)));
+  if(blen==0||ptr==NULL) return NULL;
+  *len = blen;
+  return ptr;
+  /*
   evio::evioBankIndex *biptr  = (reinterpret_cast<evio::evioBankIndex *> (bankIndex));
   //evio::evioBankIndex b0(buffer,0);
   evio::bankIndex b;
@@ -91,7 +103,7 @@ int32_t        *EvioDataEvent::geti32 ( int tag, int num , int *len)
     }
   }
   *len = 0;
-  return NULL;
+  return NULL;*/
 }
 
 void            EvioDataEvent::runIndexing(){
@@ -100,41 +112,17 @@ void            EvioDataEvent::runIndexing(){
 
 float          *EvioDataEvent::getf   ( int tag, int num , int *len)
 {
-  evio::evioBankIndex b0(buffer,0);
-  evio::bankIndex b;
-  //evio::bankIndex b = getBankIndex(tag,num);
-
-  if(b0.tagNumExists(evio::tagNum(tag,num))){
-    b = b0.getBankIndex(evio::tagNum(tag,num));
-
-    if(b.dataLength>0){
-      float *buf = new float[b.dataLength];
-      memcpy(buf,b.data,b.dataLength*sizeof(float));
-      *len = b.dataLength;
-      return buf;
-    }
-  }
-  *len = 0;
-  return NULL;
+  
 }
 
 double         *EvioDataEvent::getd   ( int tag, int num , int *len)
 {
-  evio::evioBankIndex b0(buffer,0);
-  evio::bankIndex b;
-  //evio::bankIndex b = getBankIndex(tag,num);
-
-  if(b0.tagNumExists(evio::tagNum(tag,num))){
-    b = b0.getBankIndex(evio::tagNum(tag,num));
-    if(b.dataLength>0){
-      double *buf = new double[b.dataLength];
-      memcpy(buf,b.data,b.dataLength*sizeof(double));
-      *len = b.dataLength;
-      return buf;
-    }
-  }
-  *len = 0;
-  return NULL;
+  int blen;
+  double *ptr = const_cast<double *> (reinterpret_cast<const double *> (
+  getBankIndex().getBank(tag,num,&blen)));
+  if(blen==0||ptr==NULL) return NULL;
+  *len = blen;
+  return ptr;
 }
 
 

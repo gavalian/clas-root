@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <evio_dictionary>
   <bank name="RECEVENT" tag="4500" info="EVNT bank for reconstructed CLAS12 Data">
     <section name="particle"  tag="4501" num="0" info="Container Bank">
