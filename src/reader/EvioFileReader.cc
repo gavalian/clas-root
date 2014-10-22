@@ -10,6 +10,7 @@
 #include "evio.h"
 #include "evioUtil.hxx"
 #include "evioBankIndex.hxx"
+#include "unistd.h"
 
 EvioFileReader::EvioFileReader()
 {
@@ -43,6 +44,12 @@ void EvioFileReader::open(const char *filename)
   char file[128];
   currentFileName = filename;
   sprintf(file,"%s",filename);
+  int access_status = access(file,R_OK);
+  if(access_status!=0){
+    cout << endl << "E R R O R : accessing file " 
+        << file << ". error code = " << access_status << endl;
+  }
+
   evOpen(file,"ra",&evioFileHandle);
   evIoctl(evioFileHandle, "e", (void *)&fileEventsCount);
   numberOfEventsRead = 0;
