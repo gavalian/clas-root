@@ -65,12 +65,13 @@ const uint32_t *evioptr;
   int read_status = evReadRandom(evioFileHandle,&evioptr,&bufferlen,6);
 dataEvent.init(evioptr,bufferlen);
 */
-  /*status = evGetRandomAccessTable(evioFileHandle, &pTable, &len);
+/*
+  status = evGetRandomAccessTable(evioFileHandle, &pTable, &len);
     printf("  i      pointers\n");
     printf("-------------------\n");
     for (i=0; i < len; i++) {
         printf("  %d    %p\n", i, pTable[i]);
-    }*/
+  }*/
 }
 
 int   EvioFileReader::getEntries()
