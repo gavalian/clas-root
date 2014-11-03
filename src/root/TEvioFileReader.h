@@ -50,7 +50,8 @@ class TEvioFileReader : public TObject {
 private:
 
   EvioFileReader  reader;
-
+  int currentEventInFile;
+  int numberOfEvents;
   int evioFileHandle;
   uint32_t  buffer[MAXEVIOBUF];
 
@@ -84,7 +85,7 @@ TEvioFileReader();
 
  void getEvent(TEvioDataEvent &event);
 
- //TClonesArray  *getFlashADC(int tag, int num);
+ TClonesArray  *getFlashADC(int tag, int num);
 /** An operator = if one is needed */
 /* const TEvioFileReader &operator=(const TEvioFileReader &obj); */
 

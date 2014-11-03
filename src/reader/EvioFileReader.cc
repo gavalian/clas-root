@@ -99,6 +99,9 @@ bool EvioFileReader::next()
     return false;
 }
 
+/**
+* Read event with given number
+*/
 int   EvioFileReader::readEvent(int eventnum)
 {
   const uint32_t *evioptr;
@@ -112,7 +115,9 @@ int   EvioFileReader::readEvent(int eventnum)
   
   //dataEvent.init(buffer,bufferlen);
 }
-
+/**
+* Returns Event Object 
+*/
 EvioDataEvent &EvioFileReader::getEvent()
 {
     return dataEvent;

@@ -7,35 +7,36 @@
    * Loading the evio-root shared library. Change the path if running the script
    * from a different directory.
    */
-  gSystem->Load("../lib/libEvioRoot.so");
-  
-  TEvioFileReader reader;
-  TEvioDataEvent  event;
-  reader.open("/Users/gavalian/Work/DataSpace/FlashADC/hps_000998.evio");
+  gSystem->Load("../lib/libEvioRoot.so");  
+  TEvioFileReader *reader = new TEvioFileReader();
+  TEvioDataEvent  *event  = new TEvioDataEvent();
+  reader->open("/Users/gavalian/Work/DataSpace/LTCC/ltcc0test_000195.evio");
 
   TH1D *H1_ADC = new TH1D("H1_ADC","",100,0.0,100.);
-
   int icounter = 0;
-  while( reader.next() == true ){
+
+  while( reader->next() == true ){
     icounter++;
     if(icounter%500==0) cout << " processed " << icounter << "  events " << endl;
-
-    reader.getEvent(event);
-    TClonesArray *flash = event.getFlashADC(57601,0);
+    //reader->getEvent(*event);
+    TClonesArray *flash = reader->getFlashADC(57601,43);
+    
     int nentries = flash->GetEntries();
     for(int loop = 0; loop < nentries; loop++){
       TADCClass *adc = (TADCClass *) flash->At(loop);
       //cout << " SLOT = " << adc->GetSlot() << "  CHANNEL = " << adc->GetChannel() << endl;
       //if(adc->GetSlot()==4 && adc->GetChannel()==8){
+      int slot    = adc->GetSlot();
+      int channel = adc->GetChannel();
       for(int i = 0; i < adc->GetRows(); i++){
+	
 	int value = adc->GetValue(i);
-	//cout <<  " " << value; 
+	//cout <<  " " << value << endl; 
 	H1_ADC->Fill(i,value);
       }
       //cout << endl;
       //}
     }
-
     delete flash;
   }
 

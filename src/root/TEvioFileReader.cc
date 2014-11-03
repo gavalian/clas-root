@@ -37,17 +37,37 @@ void TEvioFileReader::close()
 void TEvioFileReader::open(const char *filename)
 {
   reader.open(filename);
+  numberOfEvents     = reader.getEntries();
+  currentEventInFile = 0;
 }
 
 bool TEvioFileReader::next()
 {
-  return reader.next();
+  if(currentEventInFile>=numberOfEvents) return false;
+  reader.readEvent(currentEventInFile);
+  currentEventInFile++;
+  return true;
+  //return reader.next();
 }
 
-/*
+
 TClonesArray  *TEvioFileReader::getFlashADC(int tag, int num){
+   //TClonesArray *fcaADCStore  = new TClonesArray("TADCClass",4);
+  vector<CompositeADC_t>  vec = reader.getEvent().getCompositeData(tag,num);
   TClonesArray *fcaADCStore  = new TClonesArray("TADCClass",4);
-  }*/
+  int nADCStore = 0;
+  for(int loop = 0; loop < vec.size();loop++){
+    TADCClass class_adc(vec[loop].slot,vec[loop].channel,(int) vec[loop].samples.size());
+    //cout << " SLOT = " << vec[loop].slot << " CHANNEL = " << vec[loop].channel << " SIZE = " << (int) vec[loop].samples.size() << endl;
+    for(int vloop = 0; vloop < vec[loop].samples.size(); vloop++){
+      class_adc.SetValue(vloop,vec[loop].samples[vloop]);
+      //cout << " " << 
+    }
+    TClonesArray &tADCStore = *fcaADCStore;
+    new(tADCStore[nADCStore++]) TADCClass(class_adc);
+  }
+  return fcaADCStore;
+}
 
 TArrayI *TEvioFileReader::getArrayInt(int tag, int num)
 {
@@ -165,8 +185,9 @@ vector<double>  *TEvioFileReader::getDoubleVector(int tag, int num)
  */
 void TEvioFileReader::getEvent(TEvioDataEvent &event)
 {
+    //
     //int read_status = evRead(evioFileHandle,buffer,MAXEVIOBUF);
-    reader.getEvent(event.getDataEvent());
+    //reader.getEvent(reader.getDataEvent());
     //event.init(buffer,MAXEVIOBUF);
 }
 /*

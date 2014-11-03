@@ -8,6 +8,10 @@
    */
 
   gSystem->Load("../lib/libEvioRoot.so");
+  gStyle->SetLabelSize(0.045,"X");
+  gStyle->SetLabelSize(0.045,"Y");
+  gStyle->SetTitleSize(0.045,"X");
+  gStyle->SetTitleSize(0.045,"Y");
 
   TTreeEvio  *tree = new TTreeEvio("input.evio");
 
@@ -21,6 +25,8 @@
   TH1F  *H1_GPIDE   = new TH1F("H1_GPIDE","", 40,   0.5,  5.5);
   TH1F  *H1_RPIDE   = new TH1F("H1_RPIDE","", 40,   0.5,  5.5);
   TH1F  *H1_RPIDO   = new TH1F("H1_RPIDO","", 40,   0.5,  5.5);
+  TH1F  *H1_MASS    = new TH1F("H1_MASS" ,"",120,  -0.1,  1.3);
+  TH2D  *H2_BETA_P  = new TH2D("H2_BETA_P","",200,0.5,5.5,200,0.5,1.15);
 
   TVector3 genPart, recPart;
 
@@ -47,6 +53,11 @@
       
       int genPID = tree.GetValueI(0,"GenPart::true","pid");
       int recPID = tree.GetValueI(0,"EVENTHB::particle","pid");
+
+      float beta = tree.GetValueF(0,"EVENTHB::particle","beta");
+      float mass = tree.GetValueF(0,"EVENTHB::particle","mass");
+      H1_MASS->Fill(mass);
+      H2_BETA_P->Fill(genPart.Mag(),beta);
       //************************
       // PID 11 check
       if(genPID==11){
@@ -85,5 +96,15 @@
   H1_RPIDE->Draw("same");
   H1_RPIDO->Draw("same");
 
-
+  TCanvas *c2 = new TCanvas("c2","",800,500);
+  c2->Divide(2,1);
+  c2->cd(1);
+  H2_BETA_P->SetXTitle("P [GeV]");
+  H2_BETA_P->SetYTitle("#beta");
+  H2_BETA_P->Draw();
+  c2->cd(2);
+  H1_MASS->SetXTitle("M^{2} [GeV^{2}/c]");
+  H1_MASS->Draw();
+  H1_MASS->SetFillColor(11);
+  gPad->SetLogy();
 }
