@@ -382,6 +382,7 @@ void        TTreeEvio::LoadDictionary()
   banknames.push_back("etc/bankdefs/FTOF.xml");
   banknames.push_back("etc/bankdefs/EC.xml");
   banknames.push_back("etc/bankdefs/SEB.xml");
+  banknames.push_back("etc/bankdefs/BST.xml");
   banknames.push_back("etc/bankdefs/GenPart.xml");
   banknames.push_back("etc/bankdefs/RECEVENT.xml");
   bankList.Delete();
