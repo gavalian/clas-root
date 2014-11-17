@@ -32,18 +32,11 @@ int main(int argc, const char** argv){
   //  while(reader->next()){
   for(int loop = 0; loop < 4500; loop++){
     ic++;
-    //if(ic%1000==0) cout << " processed -----> " << ic << endl;
+    if(ic%1000==0) cout << " processed -----> " << ic << endl;
     reader->readEvent(loop+1);
-    //reader->getEvent(*event);
-    //cout << "  starting the event indexing " << endl;
-    //    for(int )
-    //for(int i = 0; i < 250000 ; i ++){
+    
+    vector<CompositeADC_t> flashData = reader->getEvent().getCompositeData(1200,0);
     reader->getEvent().getBankIndex().list();
-    //decodeDeserialize(reader->getEvent().getEventBuffer());
-    //decodeIndexing(reader->getEvent().getEventBuffer());
-    //bankIndex->initBankIndex(reader->getEvent().getEventBuffer());
-    //bankIndex->list();
-    //} 
   }
   cout << "processed " << ic << " events " << endl;
 }

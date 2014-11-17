@@ -70,7 +70,7 @@ public:
   uint8_t          getInt8 (char *data, int offset);
   uint16_t         getInt16(char *data, int offset);
   uint32_t         getInt32(char *data, int offset);
-   int64_t         getInt64(char *data, int offset);
+  int64_t          getInt64(char *data, int offset);
   void             decodeCompositeData(char *data, int size);
 };
 #endif
