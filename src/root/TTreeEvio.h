@@ -54,6 +54,7 @@ public:
 
 TTreeEvio();
 TTreeEvio(const char *filename, bool debug = false);
+TTreeEvio(const char *filename, const char *mode);
 
 /** Default Destructor */
 ~TTreeEvio();
@@ -81,6 +82,7 @@ void        InitBranches();
 void        LoadBranches();
 void        LoadBranch(TBankDescriptor &desc, int entry);
 void        LoadDictionary();
+void        LoadDictionary6();
 void        InitBranch(TBankDescriptor &desc);
 void        InitDescriptors();
 

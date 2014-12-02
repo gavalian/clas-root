@@ -29,6 +29,17 @@ TTreeEvio::TTreeEvio(const char *filename, bool debug) : TTree("CLAS12Tree","CLA
     LoadDictionary();
     InitBranches();
 }
+
+TTreeEvio::TTreeEvio(const char *filename, const char *mode) : TTree("CLAS12Tree","CLAS 12 Evio Tree")
+{
+    evioReader = new EvioFileReader();
+    evioReader->open(filename);
+    kDebugMode = false;
+    //evioReader->readEvent(5);
+    //InitDescriptors();
+    LoadDictionary6();
+    InitBranches();
+}
 /* 
 TTreeEvio::TTreeEvio(const TTreeEvio &obj)
 {
@@ -374,6 +385,23 @@ void        TTreeEvio::InitDescriptors()
   //cout << " EVNT : " << bankEvnt.GetFormatString().c_str() << endl;
 }
 
+void        TTreeEvio::LoadDictionary6()
+{
+  vector<string>  banknames;
+  banknames.push_back("etc/bankdefs/CLAS6BANKS.xml");
+  bankList.Delete();
+  TXMLBankDictionary parser;
+  for(int loop = 0; loop < banknames.size(); loop++){
+    parser.ParseFile("CLASROOT",banknames[loop].c_str());
+    for(int ik = 0; ik < parser.GetList().GetEntries();ik++){
+      TBankDescriptor *bank = new TBankDescriptor();
+      bank->Copy(*(static_cast<TBankDescriptor *> (parser.GetList().At(ik))));
+      bankList.Add(bank);
+    }
+  }
+  //int nSize = bankList.GetEntries();
+  bankSizes.resize(bankList.GetSize());
+}
 
 void        TTreeEvio::LoadDictionary()
 {
@@ -395,7 +423,6 @@ void        TTreeEvio::LoadDictionary()
       bankList.Add(bank);
     }
   }
-
   //int nSize = bankList.GetEntries();
   bankSizes.resize(bankList.GetSize());
 }
