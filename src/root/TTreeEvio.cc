@@ -261,7 +261,6 @@ void        TTreeEvio::LoadBranches(){
 void        TTreeEvio::LoadBranch(TBankDescriptor &desc, int entry)
 {
 
-
   TBranch *branch = GetBranch(desc.GetName());
   
   //if(branch!=NULL) cout << " branch is OK " << endl;

@@ -1,5 +1,6 @@
 #include <iostream>
 #include "EvioFileReader.h"
+//#include "TEvioFileReader.h"
 #include "EvioBankIndex.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,6 +13,7 @@ void  decodeIndexing(uint32_t *buffer);
 
 int main(int argc, const char** argv){
   printf("Testing out program\n");
+  //TEvioFileReader *treader = new TEvioFileReader();
   //cout << " testing program " << endl;
   //cout << argv[0] << endl;
   //cout << argv[1] << endl;
