@@ -75,6 +75,8 @@ TEvioFileReader();
  void close();
 
  bool next();
+ int getEntries();
+
 
  vector<double>  *getDoubleVector(int tag, int num);
  TArrayD         *getArrayDouble(int tag, int num);

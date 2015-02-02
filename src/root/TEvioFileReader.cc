@@ -50,6 +50,11 @@ bool TEvioFileReader::next()
   //return reader.next();
 }
 
+int TEvioFileReader::getEntries()
+{
+    return numberOfEvents;
+}
+
 
 TClonesArray  *TEvioFileReader::getFlashADC(int tag, int num){
    //TClonesArray *fcaADCStore  = new TClonesArray("TADCClass",4);
