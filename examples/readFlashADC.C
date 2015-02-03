@@ -10,7 +10,7 @@
   gSystem->Load("../lib/libEvioRoot.so");  
   TEvioFileReader *reader = new TEvioFileReader();
   TEvioDataEvent  *event  = new TEvioDataEvent();
-  reader->open("/Users/gavalian/Work/DataSpace/LTCC/ltcc0test_000195.evio");
+  reader->open("../ltcc0test_000490.evio");
 
   TH1D *H1_ADC = new TH1D("H1_ADC","",100,0.0,100.);
   int icounter = 0;
@@ -19,7 +19,8 @@
     icounter++;
     if(icounter%500==0) cout << " processed " << icounter << "  events " << endl;
     //reader->getEvent(*event);
-    TClonesArray *flash = reader->getFlashADC(57601,43);
+
+    TClonesArray *flash = reader->getFlashADC(43,57601);
     
     int nentries = flash->GetEntries();
     for(int loop = 0; loop < nentries; loop++){

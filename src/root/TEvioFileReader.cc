@@ -14,6 +14,7 @@ ClassImp(TEvioFileReader)
 
 TEvioFileReader::TEvioFileReader()
 {
+  cout << " ROOT TEMPLATE LIBRARY" << endl;
   //cout << "*********************************************************" << endl;
   //cout << "*  Initializing EvioROOT library implementing interface *" << endl;
   //cout << "*********************************************************" << endl;  
@@ -39,6 +40,7 @@ void TEvioFileReader::open(const char *filename)
   reader.open(filename);
   numberOfEvents     = reader.getEntries();
   currentEventInFile = 0;
+  cout << " TEVIOFILEREADER CLASS EVENTS = " << numberOfEvents << endl;
 }
 
 bool TEvioFileReader::next()
@@ -58,7 +60,8 @@ int TEvioFileReader::getEntries()
 
 TClonesArray  *TEvioFileReader::getFlashADC(int tag, int num){
    //TClonesArray *fcaADCStore  = new TClonesArray("TADCClass",4);
-  vector<CompositeADC_t>  vec = reader.getEvent().getCompositeData(tag,num);
+  //cout << "ku-ku" << endl;
+  vector<CompositeADC_t>  vec = reader.getEvent().getCompositeDataUp(tag,num);
   TClonesArray *fcaADCStore  = new TClonesArray("TADCClass",4);
   int nADCStore = 0;
   for(int loop = 0; loop < vec.size();loop++){

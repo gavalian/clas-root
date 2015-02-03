@@ -271,6 +271,71 @@ vector<CompositeADC_t>  EvioDataEvent::getCompositeData(int tag, int num){
   return result;
 }
 
+vector<CompositeADC_t>  EvioDataEvent::getCompositeDataUp(int tag, int composite){
+  
+  evio::evioDOMTree event(buffer);
+  evio::evioDOMNodeListP fullList     = event.getNodeList();
+  evio::evioDOMNodeList::const_iterator iter;
+  evio::evioDOMNodeList::const_iterator branch;
+  EvioCompositeDecoder decoder;
+  //cout << " loopking for " << tag << "  " << composite << endl;
+
+  vector<CompositeADC_t>  result;
+  for(iter=fullList->begin(); iter!=fullList->end(); iter++) {
+    if((*iter)->tag==tag){
+
+      evio::evioDOMNodeList *leafList = (*iter)->getChildList();
+
+      for(branch=leafList->begin();branch!=leafList->end(); branch++){
+	if( (*branch)->tag==composite){
+	  const evio::evioCompositeDOMLeafNode *leaf = static_cast<const evio::evioCompositeDOMLeafNode*>(*branch);
+	  int leafSize = leaf->getSize();
+	  //cout << " FOUND " << tag << "  " << composite << "  SIZE = " << leafSize << endl;
+	  vector<uint32_t> *pData = const_cast<vector<uint32_t> *>(&(leaf->data));
+	  decoder.decode(pData,leafSize);
+	  if(decoder.getData().size()>0){
+	    try{
+	      vector<CompositeADC_t>  decdata = decoder.getData();
+	      for(int loop = 0; loop < decdata.size();loop++){
+		//result.insert(result.end(), decoder.getData().begin(), decoder.getData().end());
+		result.push_back(decdata[loop]);
+		//for(int i = 0; i < decdata[loop].samples.size(); i++){
+		//cout << " " << decdata[loop].samples[i];
+		//} //cout << endl;
+	      }
+	    } catch (exception e){
+	      cout << "ERROR" << endl;
+	    }
+	  }
+	}
+      }
+      /*
+      const evio::evioCompositeDOMLeafNode *leaf = static_cast<const evio::evioCompositeDOMLeafNode*>(*iter);
+      int leafSize = leaf->getSize();
+      //cout << "  SIZE = " << leaf->getSize() << endl;
+      vector<uint32_t> *pData = const_cast<vector<uint32_t> *>(&(leaf->data));
+      decoder.decode(pData,leafSize);
+      if(decoder.getData().size()>0){
+	try{
+	  vector<CompositeADC_t>  decdata = decoder.getData();
+	  for(int loop = 0; loop < decdata.size();loop++){
+	    //result.insert(result.end(), decoder.getData().begin(), decoder.getData().end());
+	    result.push_back(decdata[loop]);
+	    //for(int i = 0; i < decdata[loop].samples.size(); i++){
+	      //cout << " " << decdata[loop].samples[i];
+	    //} //cout << endl;
+	  }
+	} catch (exception e){
+	  cout << "ERROR" << endl;
+	}
+      
+	}*/
+    }
+  }
+
+  return result;
+}
+
 uint8_t EvioDataEvent::getInt8(char *data, int offset){
   uint8_t value = *(reinterpret_cast<uint8_t *>(&data[offset]));
   return value;

@@ -67,6 +67,8 @@ public:
 
 
   vector<CompositeADC_t>  getCompositeData(int tag, int num);
+  vector<CompositeADC_t>  getCompositeDataUp(int tag, int composite);
+
   uint8_t          getInt8 (char *data, int offset);
   uint16_t         getInt16(char *data, int offset);
   uint32_t         getInt32(char *data, int offset);

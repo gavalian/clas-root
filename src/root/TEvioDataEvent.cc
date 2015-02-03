@@ -27,7 +27,7 @@ void TEvioDataEvent::init(uint32_t *ptr, int len)
 
 TClonesArray  *TEvioDataEvent::getFlashADC(int tag, int num){
 
-  vector<CompositeADC_t>  vec = dataEvent.getCompositeData(tag,num);
+  vector<CompositeADC_t>  vec = dataEvent.getCompositeDataUp(tag,num);
   TClonesArray *fcaADCStore  = new TClonesArray("TADCClass",4);
   int nADCStore = 0;
   for(int loop = 0; loop < vec.size();loop++){
