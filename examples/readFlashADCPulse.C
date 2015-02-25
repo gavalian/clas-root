@@ -20,6 +20,10 @@
     if(icounter%500==0) cout << " processed " << icounter << "  events " << endl;
     //reader->getEvent(*event);
     
+    if(icounter<100){
+      cout << " DISPLAYING EVENT CONTENT # " << icounter << endl;
+    }
+
     TClonesArray *flash = reader->getFlashADCPulse(43,57602);
     int nentries = flash->GetEntries();
     
@@ -33,7 +37,7 @@
       // adc->GetValue(3) - ADC Max value
 
       H1_TDC->Fill(adc->GetValue(1));
-      if(icounter<100){
+      if(icounter<100){	
 	adc->Print();
       }
       //delete flash;
