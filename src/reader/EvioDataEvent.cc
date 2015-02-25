@@ -271,6 +271,45 @@ vector<CompositeADC_t>  EvioDataEvent::getCompositeData(int tag, int num){
   return result;
 }
 
+vector<CompositeADCPulse_t>  EvioDataEvent::getCompositeDataUpPulse(int tag, int composite){
+
+  evio::evioDOMTree event(buffer);
+  evio::evioDOMNodeListP fullList     = event.getNodeList();
+  evio::evioDOMNodeList::const_iterator iter;
+  evio::evioDOMNodeList::const_iterator branch;
+  EvioCompositeDecoder decoder;
+  //cout << " loopking for " << tag << "  " << composite << endl;                                                                                       
+  vector<CompositeADCPulse_t>  result;
+  for(iter=fullList->begin(); iter!=fullList->end(); iter++) {
+    if((*iter)->tag==tag){
+
+      evio::evioDOMNodeList *leafList = (*iter)->getChildList();
+
+      for(branch=leafList->begin();branch!=leafList->end(); branch++){
+        if( (*branch)->tag==composite){
+          const evio::evioCompositeDOMLeafNode *leaf = static_cast<const evio::evioCompositeDOMLeafNode*>(*branch);
+          int leafSize = leaf->getSize();
+          //cout << " FOUND " << tag << "  " << composite << "  SIZE = " << leafSize << endl; 
+          vector<uint32_t> *pData = const_cast<vector<uint32_t> *>(&(leaf->data));
+          decoder.decodePulse(pData,leafSize);
+          if(decoder.getDataPulse().size()>0){
+            try{
+              vector<CompositeADCPulse_t>  decdata = decoder.getDataPulse();
+              //cout << " Data Size = " << decdata.size() << endl;
+              for(int loop = 0; loop < decdata.size();loop++){
+                result.push_back(decdata[loop]);
+              }
+            } catch (exception e){
+              cout << "ERROR" << endl;
+            }
+          }
+        }
+      }
+    }
+  }
+  return result;
+}
+
 vector<CompositeADC_t>  EvioDataEvent::getCompositeDataUp(int tag, int composite){
   
   evio::evioDOMTree event(buffer);

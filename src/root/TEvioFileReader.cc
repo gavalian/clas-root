@@ -6,7 +6,7 @@
 */
 #include "TEvioFileReader.h"
 #include "TEvioDataBank.h"
-
+#include "TADCClassPulse.h"
 #include "evio.h"
 #include "evioUtil.hxx"
 
@@ -55,6 +55,28 @@ bool TEvioFileReader::next()
 int TEvioFileReader::getEntries()
 {
     return numberOfEvents;
+}
+
+
+TClonesArray  *TEvioFileReader::getFlashADCPulse(int tag, int composite){
+  //TClonesArray *fcaADCStore  = new TClonesArray("TADCClass",4);                                                                               
+  //cout << "ku-ku" << endl;                                                                                                                     
+  vector<CompositeADCPulse_t>  vec = reader.getEvent().getCompositeDataUpPulse(tag,composite);
+  //cout << "  Decoded data size = " << vec.size() << endl;
+  
+  TClonesArray *fcaADCStore  = new TClonesArray("TADCClassPulse",4);
+  int nADCStore = 0;
+  for(int loop = 0; loop < vec.size();loop++){
+    TADCClassPulse class_adc(vec[loop].slot,vec[loop].channel,(int) vec[loop].samples.size());
+    //cout << " SLOT = " << vec[loop].slot << " CHANNEL = " << vec[loop].channel << " SIZE = " << (int) vec[loop].samples.size() << endl;        
+    for(int vloop = 0; vloop < vec[loop].samples.size(); vloop++){
+      class_adc.SetValue(vloop,vec[loop].samples[vloop]);
+    }
+    TClonesArray &tADCStore = *fcaADCStore;
+    new(tADCStore[nADCStore++]) TADCClassPulse(class_adc);
+  }
+  return fcaADCStore;
+  //return NULL;
 }
 
 

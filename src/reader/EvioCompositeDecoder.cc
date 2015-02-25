@@ -85,9 +85,76 @@ void    EvioCompositeDecoder::decode(vector<uint32_t> *vec, int dataSize){
     nchannels++;
     if(nchannels>=bankNChannels) break;
   }
-
-
 }
+
+void    EvioCompositeDecoder::decodePulse(vector<uint32_t> *vec, int dataSize){
+
+  //cout << " decoding pulse " << endl;
+
+
+  char *data = new char[dataSize*4];
+  memcpy(data,reinterpret_cast<char *> (&(*vec)[0]),dataSize*4);
+  
+  int offset = 0;
+  int sizeOfEntry = 2 + 4 + 2 + 2;
+
+  uint8_t   bankSlot          = getInt8 ( data, offset);
+  uint32_t  bankTrigger       = getInt32( data, offset + 1);
+  int       bankNChannels     = getInt32( data, offset + 1 + 4 + 8);
+  unsigned long long bankTime = getInt64( data, offset + 1 + 4);
+
+  //cout << " decoding : SLOT = " << (unsigned int) bankSlot 
+  //<< "  TRIGGER = " << bankTrigger 
+  //<< "  TIME = " << bankTime 
+  //<< " NCHAN = " << bankNChannels  << endl;
+  //printf("SLOT = %d \n",slot);
+  offset = offset + 1 + 4 + 8 + 4;
+  int nchannels = 0;
+  adcSamplesPulse.clear();
+  //printf("  START DECODING  = %d\n",bankSlot);
+
+  while(offset<dataSize){
+    uint8_t  chan    = getInt8(data,offset);
+    //int   samples    = 4;
+    uint32_t samples = getInt32(data,offset+1);
+    offset = offset + 1 + 4;
+    
+    //cout << " CHANNEL = " << (unsigned int) chan << "  SAMPLES = " << (unsigned int) samples << "  " <<
+    //offset + samples*sizeof(short) << "  " << dataSize << endl;;
+    if(offset + samples*sizeOfEntry > dataSize) break;
+    //cout << " scanning channels" << endl;
+    CompositeADCPulse_t  adc;
+    adc.slot = bankSlot;
+    adc.time = bankTime;
+    adc.trigger = bankTrigger;
+    adc.channel = chan;
+
+    adc.samples.clear();
+    //cout << "\t CHANNEL " <<  chan << "  SAMPLES = " << samples << endl;
+    //printf(" channel = %d  samples = %d \n", chan, samples);
+    for(int loop = 0; loop < samples; loop++){
+      int    adcV = (int) getInt16(data, offset);
+      int    tdcV = (int) getInt32(data, offset + 2);
+      int    pedV = (int) getInt16(data, offset + 2 + 4);
+      int    maxV = (int) getInt16(data, offset + 2 + 4 + 2);
+
+      //printf("%8d %8d %8d %8d\n",adc,tdc,ped,max);
+      //  cout << bankSlot << "  "  << chan << "  " << adc << " " << tdc << " " << ped << "  " << max << endl;
+      adc.samples.push_back(adcV);
+      adc.samples.push_back(tdcV);
+      adc.samples.push_back(pedV);
+      adc.samples.push_back(maxV);
+      offset += 2 + 4 + 2 + 2;
+      //cout << sp << " " ;
+    }
+
+    adcSamplesPulse.push_back(adc);
+    //cout << endl;
+    nchannels++;
+    if(nchannels>=bankNChannels) break;
+  }
+}
+
 
 void    EvioCompositeDecoder::createStructures(){
 

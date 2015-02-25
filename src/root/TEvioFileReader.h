@@ -88,6 +88,7 @@ TEvioFileReader();
  void getEvent(TEvioDataEvent &event);
 
  TClonesArray  *getFlashADC(int tag, int num);
+ TClonesArray  *getFlashADCPulse(int tag, int num);
 /** An operator = if one is needed */
 /* const TEvioFileReader &operator=(const TEvioFileReader &obj); */
 

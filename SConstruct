@@ -85,6 +85,7 @@ listDICT = [
 'src/root/TXMLBankDictionaryDict.cc',
 'src/root/TBankDescriptorDict.cc',
 'src/root/TADCClassDict.cc',
+'src/root/TADCClassPulseDict.cc',
 'src/root/TEvioDataBankDict.cc',
 'src/root/TEvioDataDescriptorDict.cc',
 'src/root/TEvioDataEventDict.cc',
@@ -101,6 +102,7 @@ env.Command('TTreeEvioDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/r
 env.Command('TXMLBankDictionaryDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TXMLBankDictionaryDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TXMLBankDictionary.h src/root/TXMLBankDictionaryLinkDef.h')
 env.Command('TBankDescriptorDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TBankDescriptorDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TBankDescriptor.h src/root/TBankDescriptorLinkDef.h')
 env.Command('TADCClassDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TADCClassDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TADCClass.h src/root/TADCClassLinkDef.h')
+env.Command('TADCClassPulseDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TADCClassPulseDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TADCClassPulse.h src/root/TADCClassPulseLinkDef.h')
 env.Command('TEvioDataBankDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioDataBankDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioDataBank.h src/root/TEvioDataBankLinkDef.h')
 env.Command('TEvioDataDescriptorDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioDataDescriptorDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioDataDescriptor.h src/root/TEvioDataDescriptorLinkDef.h')
 env.Command('TEvioDataEventDict.cc','',os.getenv('ROOTSYS') + '/bin/rootcint -f src/root/TEvioDataEventDict.cc -c -p -Isrc/reader -Isrc/evio -Isrc/root src/root/TEvioDataEvent.h src/root/TEvioDataEventLinkDef.h')
