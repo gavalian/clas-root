@@ -5,7 +5,7 @@
 * \\date 2014-09-08
 */
 #include "TClas12Reader.h"
-#include <_types/_uint8_t.h>
+
 
 
 TClas12Reader::TClas12Reader()
