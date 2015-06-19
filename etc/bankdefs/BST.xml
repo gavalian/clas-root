@@ -114,6 +114,8 @@
             <column name="trkline_yx_interc"  num="3"  type="float64"    info="trkline_yx_interc"/>
             <column name="trkline_yz_slope"   num="4"  type="float64"    info="trkline_yz_slope"/>
             <column name="trkline_yz_interc"  num="5"  type="float64"    info="trkline_yz_interc"/>
+            <column name="theta"      num="6"  type="float64"    info="theta (deg)"/>
+            <column name="phi"        num="7"  type="float64"    info="phi (deg)"/>
             <column name="Cross1_ID" num="25" type="int32" info="ID of cosmic-region 1 cross in the track"/>
             <column name="Cross2_ID" num="26" type="int32" info="ID of cosmic-region 2 cross in the track"/>
             <column name="Cross3_ID" num="27" type="int32" info="ID of cosmic-region 3 cross in the track"/>
@@ -126,54 +128,13 @@
         </section>
         <section name="Trajectory" tag="116" info="reconstructed BST cosmic track trajectory">
             <column name="ID"            num="1"  type="int32"    info="ID"/>
-            <column name="XtrackIntersPlane1" num="2"  type="float64"    info="XtrackIntersPlane 1"/>
-            <column name="YtrackIntersPlane1" num="3"  type="float64"    info="YtrackIntersPlane 1"/>
-            <column name="ZtrackIntersPlane1" num="4"  type="float64"    info="ZtrackIntersPlane 1"/>
-            <column name="XtrackIntersPlane2" num="5"  type="float64"    info="XtrackIntersPlane 2"/>
-            <column name="YtrackIntersPlane2" num="6"  type="float64"    info="YtrackIntersPlane 2"/>
-            <column name="ZtrackIntersPlane2" num="7"  type="float64"    info="ZtrackIntersPlane 2"/>
-            <column name="XtrackIntersPlane3" num="8"  type="float64"    info="XtrackIntersPlane 3"/>
-            <column name="YtrackIntersPlane3" num="9"  type="float64"    info="YtrackIntersPlane 3"/>
-            <column name="ZtrackIntersPlane3" num="10"  type="float64"    info="ZtrackIntersPlane 3"/>
-            <column name="XtrackIntersPlane4" num="11"  type="float64"    info="XtrackIntersPlane 4"/>
-            <column name="YtrackIntersPlane4" num="12"  type="float64"    info="YtrackIntersPlane 4"/>
-            <column name="ZtrackIntersPlane4" num="13"  type="float64"    info="ZtrackIntersPlane 4"/>
-            <column name="XtrackIntersPlane5" num="14"  type="float64"    info="XtrackIntersPlane 5"/>
-            <column name="YtrackIntersPlane5" num="15"  type="float64"    info="YtrackIntersPlane 5"/>
-            <column name="ZtrackIntersPlane5" num="16"  type="float64"    info="ZtrackIntersPlane 5"/>
-            <column name="XtrackIntersPlane6" num="17"  type="float64"    info="XtrackIntersPlane 6"/>
-            <column name="YtrackIntersPlane6" num="18"  type="float64"    info="YtrackIntersPlane 6"/>
-            <column name="ZtrackIntersPlane6" num="19"  type="float64"    info="ZtrackIntersPlane 6"/>
-            <column name="XtrackIntersPlane7" num="20"  type="float64"    info="XtrackIntersPlane 7"/>
-            <column name="YtrackIntersPlane7" num="21"  type="float64"    info="YtrackIntersPlane 7"/>
-            <column name="ZtrackIntersPlane7" num="22"  type="float64"    info="ZtrackIntersPlane 7"/>
-            <column name="XtrackIntersPlane8" num="23"  type="float64"    info="XtrackIntersPlane 8"/>
-            <column name="YtrackIntersPlane8" num="24"  type="float64"    info="YtrackIntersPlane 8"/>
-            <column name="ZtrackIntersPlane8" num="25"  type="float64"    info="ZtrackIntersPlane 8"/>
-            <column name="XtrackIntersPlane9" num="26"  type="float64"    info="XtrackIntersPlane 9"/>
-            <column name="YtrackIntersPlane9" num="27"  type="float64"    info="YtrackIntersPlane 9"/>
-            <column name="ZtrackIntersPlane9" num="28"  type="float64"    info="ZtrackIntersPlane 9"/>
-            <column name="XtrackIntersPlane10" num="29"  type="float64"    info="XtrackIntersPlane 10"/>
-            <column name="YtrackIntersPlane10" num="30"  type="float64"    info="YtrackIntersPlane 10"/>
-            <column name="ZtrackIntersPlane10" num="31"  type="float64"    info="ZtrackIntersPlane 10"/>
-            <column name="XtrackIntersPlane11" num="32"  type="float64"    info="XtrackIntersPlane 11"/>
-            <column name="YtrackIntersPlane11" num="33"  type="float64"    info="YtrackIntersPlane 11"/>
-            <column name="ZtrackIntersPlane11" num="34"  type="float64"    info="ZtrackIntersPlane 11"/>
-            <column name="XtrackIntersPlane12" num="35"  type="float64"    info="XtrackIntersPlane 12"/>
-            <column name="YtrackIntersPlane12" num="36"  type="float64"    info="YtrackIntersPlane 12"/>
-            <column name="ZtrackIntersPlane12" num="37"  type="float64"    info="ZtrackIntersPlane 12"/>
-            <column name="XtrackIntersPlane13" num="38"  type="float64"    info="XtrackIntersPlane 13"/>
-            <column name="YtrackIntersPlane13" num="39"  type="float64"    info="YtrackIntersPlane 13"/>
-            <column name="ZtrackIntersPlane13" num="40"  type="float64"    info="ZtrackIntersPlane 13"/>
-            <column name="XtrackIntersPlane14" num="41"  type="float64"    info="XtrackIntersPlane 14"/>
-            <column name="YtrackIntersPlane14" num="42"  type="float64"    info="YtrackIntersPlane 14"/>
-            <column name="ZtrackIntersPlane14" num="43"  type="float64"    info="ZtrackIntersPlane 14"/>
-            <column name="XtrackIntersPlane15" num="44"  type="float64"    info="XtrackIntersPlane 15"/>
-            <column name="YtrackIntersPlane15" num="45"  type="float64"    info="YtrackIntersPlane 15"/>
-            <column name="ZtrackIntersPlane15" num="46"  type="float64"    info="ZtrackIntersPlane 15"/>
-            <column name="XtrackIntersPlane16" num="47"  type="float64"    info="XtrackIntersPlane 16"/>
-            <column name="YtrackIntersPlane16" num="48"  type="float64"    info="YtrackIntersPlane 16"/>
-            <column name="ZtrackIntersPlane16" num="49"  type="float64"    info="ZtrackIntersPlane 16"/>
+            <column name="LayerTrackIntersPlane" num="2"  type="int32"    info="Layer of Intersection of Track "/>
+            <column name="SectorTrackIntersPlane" num="3"  type="int32"    info="Sector of Intersection of Track "/>
+            <column name="XtrackIntersPlane" num="5"  type="float64"    info="x of Intersection of Track "/>
+            <column name="YtrackIntersPlane" num="6"  type="float64"    info="y of Intersection of Track "/>
+            <column name="ZtrackIntersPlane" num="7"  type="float64"    info="z of Intersection of Track "/>
+            <column name="PhiTrackIntersPlane" num="8"  type="float64"    info="Local phi of Intersection of Track"/>
+            <column name="ThetaTrackIntersPlane" num="9"  type="float64"    info="Local theta of Intersection of Track"/>
         </section>
     </bank>
     
