@@ -412,6 +412,7 @@ void        TTreeEvio::LoadDictionary()
   banknames.push_back("etc/bankdefs/BST.xml");
   banknames.push_back("etc/bankdefs/GenPart.xml");
   banknames.push_back("etc/bankdefs/RECEVENT.xml");
+  banknames.push_back("etc/bankdefs/BMT.xml");
   bankList.Delete();
   TXMLBankDictionary parser;
   for(int loop = 0; loop < banknames.size(); loop++){
