@@ -42,14 +42,16 @@ int64_t EvioCompositeDecoder::getInt64(char *data, int offset){
 /* const EvioCompositeDecoder &EvioCompositeDecoder::operator=(const EvioCompositeDecoder &obj){} */
 void    EvioCompositeDecoder::decode(vector<uint32_t> *vec, int dataSize){
   
-  char *data = new char[dataSize*4];
-  memcpy(data,reinterpret_cast<char *> (&(*vec)[0]),dataSize*4);
+  char *data = new char[dataSize];
+  memcpy(data,reinterpret_cast<char *> (&(*vec)[0]),dataSize);
   
   int offset = 0;
 
   adcSamples.clear();
-
+  //cout << "decoding event with SIZE = " << dataSize << endl;
   while(offset<dataSize){
+
+    if(offset + 17 >= dataSize) break;
 
     uint8_t   bankSlot          = getInt8 ( data, offset);
     uint32_t  bankTrigger       = getInt32( data, offset + 1);
@@ -71,9 +73,11 @@ void    EvioCompositeDecoder::decode(vector<uint32_t> *vec, int dataSize){
       uint8_t  chan    = getInt8(data,offset);
       uint32_t samples = getInt32(data,offset+1);
       offset = offset + 1 + 4;
-      //cout << " CHANNEL = " << (unsigned int) chan << "  SAMPLES = " << (unsigned int) samples << "  " <<
+      int currentSlot = bankSlot;
+      //cout << "SLOT =  " << currentSlot << " CHANNEL = " << (unsigned int) chan << "  SAMPLES = " << (unsigned int) samples << "  " <<
       //offset + samples*sizeof(short) << "  " << dataSize << endl;;
-      if(offset + samples*sizeof(short) > dataSize) break;
+      //if(offset + samples*sizeof(short) > dataSize) break;
+      if(offset + samples*sizeof(short) > dataSize) return;
       //cout << " scanning channels" << endl;
       CompositeADC_t  adc;
       adc.slot = bankSlot;

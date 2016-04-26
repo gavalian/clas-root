@@ -332,10 +332,12 @@ vector<CompositeADC_t>  EvioDataEvent::getCompositeDataUp(int tag, int composite
       for(branch=leafList->begin();branch!=leafList->end(); branch++){
 	if( (*branch)->tag==composite){
 	  const evio::evioCompositeDOMLeafNode *leaf = static_cast<const evio::evioCompositeDOMLeafNode*>(*branch);
-	  int leafSize = leaf->getSize();
+	  int leafSize = 4*leaf->getSize();
 	  //cout << " FOUND " << tag << "  " << composite << "  SIZE = " << leafSize << endl;
 	  vector<uint32_t> *pData = const_cast<vector<uint32_t> *>(&(leaf->data));
+	  //cout << " going to decode " << endl;
 	  decoder.decode(pData,leafSize);
+	  //cout << " done decoding " << endl;
 	  if(decoder.getData().size()>0){
 	    try{
 	      vector<CompositeADC_t>  decdata = decoder.getData();

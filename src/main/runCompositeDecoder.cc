@@ -32,20 +32,21 @@ int main(int argc, const char** argv){
 
   int ic = 0;
   //  while(reader->next()){
-  for(int loop = 0; loop < 4500; loop++){
+  for(int loop = 0; loop < 500; loop++){
     ic++;
     if(ic%1000==0) cout << " processed -----> " << ic << endl;
     reader->readEvent(loop+1);
-    
+    cout << "---> processing event # " << loop << endl;
     vector<CompositeADC_t> flashData = reader->getEvent().getCompositeDataUp(5,57601);
+    cout << "---> decoding done # " << loop << endl;
     reader->getEvent().getBankIndex().list();
-    //cout << "data length = " << flashData.size() << endl;
+    cout << "data length = " << flashData.size() << endl;
     for(int i = 0; i < flashData.size(); i++){
       cout << "SLOT/CHANNEL " << flashData[i].slot << "  " << flashData[i].channel << endl;
-      for(int c = 0; c < flashData[i].samples.size();c++){
-	cout << c << " ->  " << flashData[i].samples[c] << "  "; 
-      }
-      cout << endl;
+      //for(int c = 0; c < flashData[i].samples.size();c++){
+      //cout << c << " ->  " << flashData[i].samples[c] << "  "; 
+      //}
+      //cout << endl;
     }
     
   }
