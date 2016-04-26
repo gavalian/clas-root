@@ -41,49 +41,57 @@ int64_t EvioCompositeDecoder::getInt64(char *data, int offset){
 
 /* const EvioCompositeDecoder &EvioCompositeDecoder::operator=(const EvioCompositeDecoder &obj){} */
 void    EvioCompositeDecoder::decode(vector<uint32_t> *vec, int dataSize){
+  
   char *data = new char[dataSize*4];
   memcpy(data,reinterpret_cast<char *> (&(*vec)[0]),dataSize*4);
   
   int offset = 0;
 
-  uint8_t   bankSlot          = getInt8 ( data, offset);
-  uint32_t  bankTrigger       = getInt32( data, offset + 1);
-  int       bankNChannels     = getInt32( data, offset + 1 + 4 + 8);
-  unsigned long long bankTime = getInt64( data, offset + 1 + 4);
-
-  //cout << " decoding : SLOT = " << (unsigned int) bankSlot 
-  //<< "  TRIGGER = " << bankTrigger 
-  //<< "  TIME = " << bankTime 
-  //<< " NCHAN = " << bankNChannels  << endl;
-  //printf("SLOT = %d \n",slot);
-  offset = offset + 1 + 4 + 8 + 4;
-  int nchannels = 0;
   adcSamples.clear();
 
   while(offset<dataSize){
-    uint8_t  chan    = getInt8(data,offset);
-    uint32_t samples = getInt32(data,offset+1);
-    offset = offset + 1 + 4;
-    //cout << " CHANNEL = " << (unsigned int) chan << "  SAMPLES = " << (unsigned int) samples << "  " <<
-    //offset + samples*sizeof(short) << "  " << dataSize << endl;;
-    if(offset + samples*sizeof(short) > dataSize) break;
-    //cout << " scanning channels" << endl;
-    CompositeADC_t  adc;
-    adc.slot = bankSlot;
-    adc.time = bankTime;
-    adc.trigger = bankTrigger;
-    adc.channel = chan;
-    adc.samples.clear();
-    for(int loop = 0; loop < samples; loop++){
-      short sp = getInt16(data, offset);
-      adc.samples.push_back(sp);
-      offset += 2;
-      //cout << sp << " " ;
+
+    uint8_t   bankSlot          = getInt8 ( data, offset);
+    uint32_t  bankTrigger       = getInt32( data, offset + 1);
+    unsigned long long bankTime = getInt64( data, offset + 1 + 4);  
+    int       bankNChannels     = getInt32( data, offset + 1 + 4 + 8);
+    
+    /*cout << " decoding : SLOT = " << (unsigned int) bankSlot 
+	 << "  TRIGGER = " << bankTrigger 
+	 << "  TIME = " << bankTime 
+	 << " NCHAN = " << bankNChannels  << "  CURRENT OFFSET = " << offset << endl;
+    printf("SLOT = %d \n",bankSlot);
+    printf("DATASIZE = %d \n",dataSize);
+    */
+    offset = offset + 1 + 4 + 8 + 4;
+    
+    int nchannels = 0;
+    for(int ch = 0; ch < bankNChannels; ch++){
+    //while(offset<dataSize){
+      uint8_t  chan    = getInt8(data,offset);
+      uint32_t samples = getInt32(data,offset+1);
+      offset = offset + 1 + 4;
+      //cout << " CHANNEL = " << (unsigned int) chan << "  SAMPLES = " << (unsigned int) samples << "  " <<
+      //offset + samples*sizeof(short) << "  " << dataSize << endl;;
+      if(offset + samples*sizeof(short) > dataSize) break;
+      //cout << " scanning channels" << endl;
+      CompositeADC_t  adc;
+      adc.slot = bankSlot;
+      adc.time = bankTime;
+      adc.trigger = bankTrigger;
+      adc.channel = chan;
+      adc.samples.clear();
+      for(int loop = 0; loop < samples; loop++){
+	short sp = getInt16(data, offset);
+	adc.samples.push_back(sp);
+	offset += 2;
+	//cout << sp << " " ;
+      }
+      adcSamples.push_back(adc);
     }
-    adcSamples.push_back(adc);
     //cout << endl;
-    nchannels++;
-    if(nchannels>=bankNChannels) break;
+    //nchannels++;
+    //if(nchannels>=bankNChannels) break;
   }
 }
 
@@ -112,7 +120,7 @@ void    EvioCompositeDecoder::decodePulse(vector<uint32_t> *vec, int dataSize){
   int nchannels = 0;
   adcSamplesPulse.clear();
   //printf("  START DECODING  = %d\n",bankSlot);
-
+  //cout << " CHANNELS = " << bankNChannels << "  SLOT = "  << bankSlot << endl;
   while(offset<dataSize){
     uint8_t  chan    = getInt8(data,offset);
     //int   samples    = 4;

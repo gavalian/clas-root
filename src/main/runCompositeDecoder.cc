@@ -37,8 +37,17 @@ int main(int argc, const char** argv){
     if(ic%1000==0) cout << " processed -----> " << ic << endl;
     reader->readEvent(loop+1);
     
-    vector<CompositeADC_t> flashData = reader->getEvent().getCompositeData(1200,0);
+    vector<CompositeADC_t> flashData = reader->getEvent().getCompositeDataUp(5,57601);
     reader->getEvent().getBankIndex().list();
+    //cout << "data length = " << flashData.size() << endl;
+    for(int i = 0; i < flashData.size(); i++){
+      cout << "SLOT/CHANNEL " << flashData[i].slot << "  " << flashData[i].channel << endl;
+      for(int c = 0; c < flashData[i].samples.size();c++){
+	cout << c << " ->  " << flashData[i].samples[c] << "  "; 
+      }
+      cout << endl;
+    }
+    
   }
   cout << "processed " << ic << " events " << endl;
 }

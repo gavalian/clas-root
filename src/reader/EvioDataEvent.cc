@@ -222,12 +222,16 @@ vector<CompositeADC_t>  EvioDataEvent::getCompositeData(int tag, int num){
 
   vector<CompositeADC_t>  result;
   for(iter=fullList->begin(); iter!=fullList->end(); iter++) {
+    cout << "BANKS = " << (*iter)->tag << "  " << ((int) (*iter)->num) << endl;
     if((*iter)->tag==tag&& ((int)(*iter)->num)==num){
+      cout << "FOUND " << tag << " num = " << num << endl;; 
       const evio::evioCompositeDOMLeafNode *leaf = static_cast<const evio::evioCompositeDOMLeafNode*>(*iter);
       int leafSize = leaf->getSize();
-      //cout << "  SIZE = " << leaf->getSize() << endl;
+      cout << " FOUND LEAF SIZE = " << leaf->getSize() << endl;
       vector<uint32_t> *pData = const_cast<vector<uint32_t> *>(&(leaf->data));
+      cout << " Sending to decoder " << endl;
       decoder.decode(pData,leafSize);
+      cout << "returned from decoder" << endl;
       if(decoder.getData().size()>0){
 	try{
 	  vector<CompositeADC_t>  decdata = decoder.getData();

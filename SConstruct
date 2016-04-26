@@ -125,6 +125,6 @@ if 'src/root/TTreeEvioDict.cc' in listROOTLIB:
 
 env.SharedLibrary(target="lib/libEvioRoot.so",source = listROOTLIB + listEVIOLIB + listCPPLIB + listTOOLS + listDICT)
 env.Library(target="lib/libEvioClas12.a",source = listCPPLIB)
-#env.Program(target="bin/runCompositeDecoder",source = listEVIOLIB + listCPPLIB + listDECODER)
+env.Program(target="bin/runCompositeDecoder",source = listEVIOLIB + listCPPLIB + listDECODER)
 
 
