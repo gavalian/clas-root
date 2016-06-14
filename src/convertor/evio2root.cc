@@ -9,11 +9,16 @@
 #include "TTree.h"
 #include "TFile.h"
 #include "TROOT.h"
+#include "TBranch.h"
+#include "TLeaf.h"
 
 void printMessage();
 void fill_Detector(EvioFileReader *reader);
 void fill_Event(EvioFileReader *reader);
 void fill_Generated_Event(EvioFileReader *reader);
+void init_Generated_Event(TTree *tree);
+void init_Event(TTree *tree);
+void init_Detector(TTree *tree);
 
 int  npart = 0;
 int  pid[20];
@@ -56,13 +61,21 @@ float ptime[50];
 
 int main(int argc, const char** argv){
 
-  if(argc<2){
+  if(argc<3){
     printf("error -> provide a file name \n\n");
+    printf("\n\n");
+    printf("\t Usage : evio2root inputfile.evio outputfile.root");
+    printf("\n\n");
+    exit(0);
   }
 
-  TFile *f   = new TFile("peter.root","recreate");
+  char outputfile[128];
+  sprintf(outputfile,"%s",argv[2]);
+
+  TFile *f   = new TFile(outputfile,"recreate");
   TTree* c12 = new TTree("clas12","CLAS12 Reconstruction");
 
+/*
   c12->Branch("npart",&npart,"npart/I");
   c12->Branch("charge",charge,"charge[npart]/I");
   c12->Branch("status",status,"status[npart]/I");
@@ -72,33 +85,13 @@ int main(int argc, const char** argv){
   c12->Branch("px",px,"px[npart]/F");
   c12->Branch("py",py,"py[npart]/F");
   c12->Branch("pz",pz,"pz[npart]/F");
-  c12->Branch("vx",vx,"vx[npart]/F");
-  c12->Branch("vy",vy,"vy[npart]/F");
-  c12->Branch("vz",vz,"vz[npart]/F");
-
-  c12->Branch("gpart",&gpart,"gpart/I");
-  c12->Branch("gid",gid,"gid[gpart]/I");
-  c12->Branch("gpx",gpx,"gpx[gpart]/F");
-  c12->Branch("gpy",gpy,"gpy[gpart]/F");
-  c12->Branch("gpz",gpz,"gpz[gpart]/F");
-  c12->Branch("gvx",gvx,"gvx[gpart]/F");
-  c12->Branch("gvy",gvy,"gvy[gpart]/F");
-  c12->Branch("gvz",gvz,"gvz[gpart]/F");
-
-  c12->Branch("ndet",&ndet,"ndet/I");
-  c12->Branch("detector",detector,"detector[ndet]/I");
-  c12->Branch("pindex",pindex,"pindex[ndet]/I");
-  c12->Branch("sector",sector,"sector[ndet]/I");
-  c12->Branch("layer",layer,"layer[ndet]/I");
-  c12->Branch("X",X,"X[ndet]/F");
-  c12->Branch("Y",Y,"Y[ndet]/F");
-  c12->Branch("Z",Z,"Z[ndet]/F");
-  c12->Branch("hX",hX,"hX[ndet]/F");
-  c12->Branch("hY",hY,"hY[ndet]/F");
-  c12->Branch("hZ",hZ,"hZ[ndet]/F");
-  c12->Branch("path",path,"path[ndet]/F");
-  c12->Branch("energy",energy,"energy[ndet]/F");
-  c12->Branch("time",ptime,"time[ndet]/F");    
+  c12->Branch("x",vx,"vx[npart]/F");
+  c12->Branch("y",vy,"vy[npart]/F");
+  c12->Branch("z",vz,"vz[npart]/F");
+*/
+  init_Event(c12);
+  init_Generated_Event(c12);
+  init_Detector(c12);
 
   printMessage();
 
@@ -128,6 +121,73 @@ int main(int argc, const char** argv){
   f->Close();
 }
 
+void init_Generated_Event(TTree *tree){
+
+  TBranch *genBranch = tree->Branch("GenPart",&gpart,"gpart/I:pid[gpart]/I:px[gpart]/F:py[gpart]/F:pz[gpart]/F:x[gpart]/F:y[gpart]/F:z[gpart]/F");
+  genBranch->FindLeaf("pid")->SetAddress(gid);
+  genBranch->FindLeaf("px")->SetAddress(gpx);
+  genBranch->FindLeaf("py")->SetAddress(gpy);
+  genBranch->FindLeaf("pz")->SetAddress(gpz);
+  genBranch->FindLeaf("x")->SetAddress(gvx);
+  genBranch->FindLeaf("y")->SetAddress(gvy);
+  genBranch->FindLeaf("z")->SetAddress(gvz);  
+  /*
+  c12->Branch("gid",gid,"gid[gpart]/I");
+  c12->Branch("gpx",gpx,"gpx[gpart]/F");
+  c12->Branch("gpy",gpy,"gpy[gpart]/F");
+  c12->Branch("gpz",gpz,"gpz[gpart]/F");
+  c12->Branch("gvx",gvx,"gvx[gpart]/F");
+  c12->Branch("gvy",gvy,"gvy[gpart]/F");
+  c12->Branch("gvz",gvz,"gvz[gpart]/F");
+  */
+}
+void init_Event(TTree *tree){
+  TBranch *evBranch = tree->Branch("Event",&npart,"npart/I:pid[npart]/I:charge[npart]/I:status[npart]/I:beta[npart]/F:mass[npart]/F:px[npart]/F:py[npart]/F:pz[npart]/F:x[npart]/F:y[npart]/F:z[npart]/F");
+  evBranch->FindLeaf("pid")->SetAddress(pid);
+  evBranch->FindLeaf("charge")->SetAddress(charge);
+  evBranch->FindLeaf("status")->SetAddress(status);
+  evBranch->FindLeaf("mass")->SetAddress(mass);
+  evBranch->FindLeaf("beta")->SetAddress(beta);
+  evBranch->FindLeaf("px")->SetAddress(px);
+  evBranch->FindLeaf("py")->SetAddress(py);
+  evBranch->FindLeaf("pz")->SetAddress(pz);
+  evBranch->FindLeaf("x")->SetAddress(vx);
+  evBranch->FindLeaf("y")->SetAddress(vy);
+  evBranch->FindLeaf("z")->SetAddress(vz);
+}
+
+void init_Detector(TTree *tree){
+  TBranch *detBranch = tree->Branch("Detector",&ndet,"nhits/I:detector[nhits]/I:pindex[nhits]/I:sector[nhits]/I:layer[nhits]/I:X[nhits]/F:Y[nhits]/F:Z[nhits]/F:hX[nhits]/F:hY[nhits]/F:hZ[nhits]/F:time[nhits]/F:energy[nhits]/F:path[nhits]/F");
+  detBranch->FindLeaf("detector")->SetAddress(detector);
+  detBranch->FindLeaf("detector")->SetAddress(detector);
+  detBranch->FindLeaf("pindex")->SetAddress(pindex);  
+  detBranch->FindLeaf("sector")->SetAddress(sector);  
+  detBranch->FindLeaf("layer")->SetAddress(layer);  
+  detBranch->FindLeaf("X")->SetAddress(X);
+  detBranch->FindLeaf("Y")->SetAddress(Y);
+  detBranch->FindLeaf("Z")->SetAddress(Z);
+  detBranch->FindLeaf("hX")->SetAddress(hX);
+  detBranch->FindLeaf("hY")->SetAddress(hY);
+  detBranch->FindLeaf("hZ")->SetAddress(hZ);
+  detBranch->FindLeaf("time")->SetAddress(ptime);
+  detBranch->FindLeaf("energy")->SetAddress(energy);
+  detBranch->FindLeaf("path")->SetAddress(path);    
+  /*
+  c12->Branch("ndet",&ndet,"ndet/I");
+  c12->Branch("detector",detector,"detector[ndet]/I");
+  c12->Branch("pindex",pindex,"pindex[ndet]/I");
+  c12->Branch("sector",sector,"sector[ndet]/I");
+  c12->Branch("layer",layer,"layer[ndet]/I");
+  c12->Branch("X",X,"X[ndet]/F");
+  c12->Branch("Y",Y,"Y[ndet]/F");
+  c12->Branch("Z",Z,"Z[ndet]/F");
+  c12->Branch("hX",hX,"hX[ndet]/F");
+  c12->Branch("hY",hY,"hY[ndet]/F");
+  c12->Branch("hZ",hZ,"hZ[ndet]/F");
+  c12->Branch("path",path,"path[ndet]/F");
+  c12->Branch("energy",energy,"energy[ndet]/F");
+  c12->Branch("time",ptime,"time[ndet]/F");    */
+}
 
 void fill_Event(EvioFileReader *reader){
 
