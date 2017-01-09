@@ -29,9 +29,10 @@ if os.getenv('ROOTSYS') == None:
 env = Environment(CPPPATH=["/opt/local/include","include",".","src/root","src/reader","src/tools"])
 env.Append(ENV = os.environ)
 env.Append(CPPPATH=["src/root","src/evio"])
-env.Append(CCFLAGS=["-O2","-fPIC","-m64","-fmessage-length=0","-g"])
+env.Append(CFLAGS=["-O2","-fPIC","-m64","-fmessage-length=0","-g"])
+env.Append(CXXFLAGS=["-O2","-fPIC","-m64","-fmessage-length=0","-g"])
 #env.Append(CCFLAGS=["-O2","-fPIC","-m32","-fmessage-length=0"])
-env.Append(LIBPATH=["/opt/local/lib","/usr/lib","lib"])
+#env.Append(LIBPATH=["/opt/local/lib","/usr/lib","lib"])
 #env.Append(LIBS=["iG5io"])
 #-----------------------------------------------------------------------
 #  Parsing input Arguments
@@ -44,15 +45,18 @@ if ARGUMENTS.get('verbose') != '1':
 #   env['CCCOMSTR']   = "--> Compiling : $TARGET"
    env['LINKCOMSTR'] = "[==] --> Linking : $TARGET"
 #   env['ARCOMSTR']   = "[==] --> Archiving : $TARGET"
-   env.Append(CCFLAGS=["-w"])
+   env.Append(CXXFLAGS=["-w"])
+   env.Append(CFLAGS=["-w"])
 
 if int(compileMode):
    print '-->  Compiling library in debug mode...'
-   env.Append(CCFLAGS=['-g'])
+   env.Append(CXXFLAGS=['-g'])
+   env.Append(CFLAGS=['-g'])
 
 if os.getenv('OSTYPE') != None:
    if os.getenv('OSTYPE')=='darwin':
-      env.Append(CCFLAGS=['-DDarwin'])
+      env.Append(CXXFLAGS=['-DDarwin'])
+      env.Append(CFLAGS=['-DDarwin'])
 #------------------------------------------------------------------------
 # Check Essential setup of enviromental variables (GOOLIB and HDF5_DIR) -
 #------------------------------------------------------------------------
